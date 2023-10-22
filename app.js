@@ -13,33 +13,38 @@
     data: se utiliza para almacenar los datos o el resultado de la operacion
     */
     fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
-    var query="SELECT  edad   correo,sueldo    FROM     usuarios      WHERE nombre='juan, pedro'";
+    var query="SELECT        edad            correo,sueldo            FROM         usuarios           WHERE nombre='juan, pedro'";
     //variables necesarias
     var caracterVacio=" ";
     var letraActual="";
     var formarPalabra="";
     var caracteresDiferentes=",'=";
-    var letraExtra="";
-    var letraExtraPosicion=0;
+
     var letraActualPosicion=0;
     var contadorEspacios=0;
+
     //Bucle for GENERAL
     for(let i=0;i<query.length;i++){
         letraActual=query[i]; //almacena la letra
         letraActualPosicion=i; //almacena la posicion
-        console.log("Letra: "+letraActual+" y posicion: "+letraActualPosicion);
     
-        formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
-        if(letraActual==caracterVacio){
-            console.log(formarPalabra);
-            console.log("espacio detectado en el caracter "+letraActualPosicion);
-            contadorEspacios++;
-            formarPalabra="";
-        }//fin del while
+        if(letraActual!=caracterVacio){ //primero evalua si el caracter es diferente de vacio
+            formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
+        }
         
+        if(letraActual==caracterVacio){
+            if(formarPalabra==""){
+                formarPalabra="";
+            }else{
+                console.log(formarPalabra);
+                formarPalabra="";
+            }
             
+        }//fin del if
+            
+
     }//fin bucle for general
-    console.log("el total de espacios es: "+contadorEspacios);
+  
     
     }); //fin del readFile
 
