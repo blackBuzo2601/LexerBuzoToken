@@ -13,7 +13,7 @@ err: se utiliza para almacenar cualquier error que ocurra durante la operacion.
 data: se utiliza para almacenar los datos o el resultado de la operacion
 */
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
-var query="SELECT   edad   correo,sueldo   FROM   usuarios   WHERE   nombre='juan,   pedro'";
+var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'";
 //variables necesarias
 var caracterVacio=" ";
 var letraActual="";
@@ -27,25 +27,28 @@ for(let i=0;i<query.length;i++){
     letraActual=query[i]; //almacena la letra
     letraActualPosicion=query.indexOf(letraActual); //almacena la posicion de la letra
 
-   
     formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
     if(letraActual==caracterVacio){
         console.log(formarPalabra);
+        console.log("espacio detectado en el caracter "+letraActualPosicion);
         formarPalabra="";
-    }
+
         //pasar a la siguiente letra a ver si es vacia
         letraExtra=query[letraActualPosicion+1]; //almacena la letra SIGUIENTE
         letraExtraPosicion=query.indexOf(letraExtra);//almacena la posicion de letra SIGUIENTE
-        while(letraExtra==caracterVacio){
-            letraExtraPosicion=letraExtraPosicion+1;
-            letraExtra=query[letraExtraPosicion]; //almacena la letra SIGUIENTE
-            
+        if(letraExtra==caracterVacio){
+            letraActualPosicion=letraActualPosicion+1;
+            letraActual=query[letraActualPosicion];
+            while(letraActual==caracterVacio){
+                letraActualPosicion=letraActualPosicion+1;
+                letraActual=query[letraActualPosicion]; //almacena la letra SIGUIENTE
+                console.log("Espacio detectado en el caracter: "+letraActualPosicion);
+            }
         }
         
-   
-
-
-
+    }
+        
+        
 }//fin bucle for general
 
 
