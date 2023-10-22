@@ -21,6 +21,7 @@ var formarPalabra="";
 var caracteresDiferentes=",'=";
 var letraSiguiente="";
 var letraExtra="";
+var letraExtraPosicion=0;
 var letraActualPosicion=0;
 var letraSiguientePosicion="";
 
@@ -35,7 +36,13 @@ for(let i=0;i<query.length;i++){
         console.log(formarPalabra);
         formarPalabra="";
 
-        letraActual=letraActualPosicion+1;
+        //pasar a la siguiente letra a ver si es vacia
+        letraExtra=query[letraActualPosicion+1]; //almacena la letra SIGUIENTE
+        letraExtraPosicion=query.indexOf(letraExtra);//almacena la posicion de letra SIGUIENTE
+        while(letraExtra==caracterVacio){
+            letraExtraPosicion=letraExtraPosicion+1;
+            letraExtra=query[letraExtraPosicion]; //almacena la letra SIGUIENTE
+        }
 
     }
 
