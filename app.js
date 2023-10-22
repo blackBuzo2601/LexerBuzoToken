@@ -20,36 +20,29 @@ var letraActual="";
 var formarPalabra="";
 var caracteresDiferentes=",'=";
 var letraSiguiente="";
+var letraExtra="";
+var letraActualPosicion=0;
+var letraSiguientePosicion="";
 
-function evaluaEspacios(){
-    
-}
 
 //Bucle for GENERAL
 for(let i=0;i<query.length;i++){
-    letraActual=query[i];
+    letraActual=query[i]; //almacena la letra
+    letraActualPosicion=query.indexOf(letraActual); //almacena la posicion de la letra
+
     formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
     if(letraActual==caracterVacio){
-        letraSiguiente=query[i+1]; //evalua si el siguiente caracter tambien es un espacio vacio
-        while(letraSiguiente==caracterVacio){
-            letraSiguiente=query[i+1];
-        }
-        
+        console.log(formarPalabra);
+        formarPalabra="";
 
-        //console.log(formarPalabra);
-        //formarPalabra="";
+        letraActual=letraActualPosicion+1;
+
     }
-    
-}
 
-/*
-var variable=0;
-do{
-    variable=variable+10;
-    console.log("prueba");
-}while(variable<=100)
-*/
 
+
+
+}//fin bucle for general
 
 }); //fin del readFile
 
