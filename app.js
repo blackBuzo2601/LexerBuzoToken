@@ -25,9 +25,9 @@ var letraActualPosicion=0;
 //Bucle for GENERAL
 for(let i=0;i<query.length;i++){
     letraActual=query[i]; //almacena la letra
-    letraActualPosicion=query.indexOf(letraActual); //almacena la posicion de la letra
+    letraActualPosicion=i; //almacena la posicion
     console.log("Letra: "+letraActual+" y posicion: "+letraActualPosicion);
-/*
+
     formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
     if(letraActual==caracterVacio){
         console.log(formarPalabra);
@@ -48,7 +48,7 @@ for(let i=0;i<query.length;i++){
         }
         
     }//fin del while
-        */
+        
         
 }//fin bucle for general
 
