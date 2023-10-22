@@ -19,37 +19,35 @@ var caracterVacio=" ";
 var letraActual="";
 var formarPalabra="";
 var caracteresDiferentes=",'=";
-var letraSiguiente="";
 var letraExtra="";
 var letraExtraPosicion=0;
 var letraActualPosicion=0;
-var letraSiguientePosicion="";
-var almacenaEspacios="";
-
 //Bucle for GENERAL
 for(let i=0;i<query.length;i++){
     letraActual=query[i]; //almacena la letra
     letraActualPosicion=query.indexOf(letraActual); //almacena la posicion de la letra
 
+   
     formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
     if(letraActual==caracterVacio){
         console.log(formarPalabra);
         formarPalabra="";
-
+    }
         //pasar a la siguiente letra a ver si es vacia
         letraExtra=query[letraActualPosicion+1]; //almacena la letra SIGUIENTE
         letraExtraPosicion=query.indexOf(letraExtra);//almacena la posicion de letra SIGUIENTE
         while(letraExtra==caracterVacio){
-            letraExtra.trim();
             letraExtraPosicion=letraExtraPosicion+1;
             letraExtra=query[letraExtraPosicion]; //almacena la letra SIGUIENTE
+            
         }
-    }//fin condicional if
-
+        
+   
 
 
 
 }//fin bucle for general
+
 
 }); //fin del readFile
 
