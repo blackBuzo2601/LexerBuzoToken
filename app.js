@@ -26,7 +26,8 @@ var letraActualPosicion=0;
 for(let i=0;i<query.length;i++){
     letraActual=query[i]; //almacena la letra
     letraActualPosicion=query.indexOf(letraActual); //almacena la posicion de la letra
-
+    console.log("Letra: "+letraActual+" y posicion: "+letraActualPosicion);
+/*
     formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
     if(letraActual==caracterVacio){
         console.log(formarPalabra);
@@ -34,9 +35,9 @@ for(let i=0;i<query.length;i++){
         formarPalabra="";
 
         //pasar a la siguiente letra a ver si es vacia
-        letraExtra=query[letraActualPosicion+1]; //almacena la letra SIGUIENTE
-        letraExtraPosicion=query.indexOf(letraExtra);//almacena la posicion de letra SIGUIENTE
-        if(letraExtra==caracterVacio){
+        letraActual=query[letraActualPosicion+1]; //almacena la letra SIGUIENTE
+        letraActual=query.indexOf(letraActual);//almacena la posicion de letra SIGUIENTE
+        if(letraActual==caracterVacio){
             letraActualPosicion=letraActualPosicion+1;
             letraActual=query[letraActualPosicion];
             while(letraActual==caracterVacio){
@@ -46,8 +47,8 @@ for(let i=0;i<query.length;i++){
             }
         }
         
-    }
-        
+    }//fin del while
+        */
         
 }//fin bucle for general
 
