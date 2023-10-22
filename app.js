@@ -13,7 +13,7 @@ err: se utiliza para almacenar cualquier error que ocurra durante la operacion.
 data: se utiliza para almacenar los datos o el resultado de la operacion
 */
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
-var query="SELECT   edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'";
+var query="SELECT   edad   correo,sueldo   FROM   usuarios   WHERE   nombre='juan,   pedro'";
 //variables necesarias
 var caracterVacio=" ";
 var letraActual="";
@@ -24,7 +24,7 @@ var letraExtra="";
 var letraExtraPosicion=0;
 var letraActualPosicion=0;
 var letraSiguientePosicion="";
-
+var almacenaEspacios="";
 
 //Bucle for GENERAL
 for(let i=0;i<query.length;i++){
@@ -40,11 +40,11 @@ for(let i=0;i<query.length;i++){
         letraExtra=query[letraActualPosicion+1]; //almacena la letra SIGUIENTE
         letraExtraPosicion=query.indexOf(letraExtra);//almacena la posicion de letra SIGUIENTE
         while(letraExtra==caracterVacio){
+            letraExtra.trim();
             letraExtraPosicion=letraExtraPosicion+1;
             letraExtra=query[letraExtraPosicion]; //almacena la letra SIGUIENTE
         }
-
-    }
+    }//fin condicional if
 
 
 
