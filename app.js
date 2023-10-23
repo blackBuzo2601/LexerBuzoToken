@@ -1,12 +1,16 @@
-//Programa probado con Node JS 16.17.1
-//Elaborado por Buzo Zamora Elian
-//21 de Octubre de 2023, Ensenada B.C
-//NOTA 1: Estoy intentando hacer el mismo lexer anterior, pero esta vez evaluando caracter por caracter
-//e intentare que esta vez imprima bien las palabras sin saltos de linea adicionales. Osea bien.
-//NOTA 2: Funciona como deberia funcionar el Lexer anterior. Es momento de programar lo
-//correspondiente a los tokens del arhivo sqlkeywords.txt
+/*
+Programa probado con Node JS 16.17.1
+Elaborado por Buzo Zamora Elian
+21 de Octubre de 2023, Ensenada B.C
+NOTA 1: Estoy intentando hacer el mismo lexer anterior, pero esta vez evaluando caracter por caracter
+e intentare que esta vez imprima bien las palabras sin saltos de linea adicionales. Osea bien.
+NOTA 2: Funciona como deberia funcionar el Lexer anterior. Es momento de programar lo
+correspondiente a los tokens del arhivo sqlkeywords.txt
+NOTA 3: Lo mismo que imprime en consola, lo almacena en un archivo log, lo que me permitira
+trabajar con ese mismo archivo para lo de los tokens.
+*/
 
-/*  usamos el modulo fs de Node.js
+/*  Usamos el modulo fs de Node.js
     con require ('fs) se esta importando el modulo 
     para acceder a todas las funciones y metodos de fs. */
     const fs = require ('fs'); 
@@ -16,9 +20,7 @@
     err: se utiliza para almacenar cualquier error que ocurra durante la operacion.
     data: se utiliza para almacenar los datos o el resultado de la operacion
     */
-    fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
-
-        
+    
     var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'"
     //variables necesarias
     var caracterVacio=" ";
@@ -37,19 +39,19 @@
                     formarPalabra="";   
                     console.log(letraActual); //solo imprime la letraActual (que corresponde a un caracter Especial)
                     
-                    mensaje=""+letraActual;
+                    mensaje='"'+letraActual+'"';
                     fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                         if (err) throw err;
                     });
                 }else{ //si habia una palabra construida previamente entrará en esta condición
                     console.log(formarPalabra); //imprimirá la palabra previamente construida
-                        mensaje=""+formarPalabra;
+                        mensaje='"'+formarPalabra+'"';
                         fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                             if (err) throw err;
                         });
 
                     console.log(letraActual);   //imprimirá después el caracter especial
-                        mensaje=""+letraActual;
+                        mensaje='"'+letraActual+'"';
                         fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                             if (err) throw err;
                         });
@@ -61,30 +63,34 @@
             }
         }//fin primer condicional
     
+        //segundo condicional
         if(letraActual==caracterVacio){//aqui entra cuando el caracter es vacio.
             if(formarPalabra==""){ 
                 formarPalabra="";
             }else{ //esto se corre si formarPalabra tiene puras letras
                 console.log(formarPalabra);
 
-                    mensaje=""+formarPalabra;
+                    mensaje='"'+formarPalabra+'"';
                         fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                             if (err) throw err;
                         });
                 formarPalabra="";
             }    
         }//fin segundo condicional
-            
+          
+        
     }//fin bucle for general
+ 
 
-    if(query[query.length-1]!=" "){ //evalua si el ultimo caracter del query es diferente de vacio. Para imprimir la palabra formada
-        console.log(formarPalabra);
-            mensaje=""+formarPalabra;
-            fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
-                if (err) throw err;
-            });
-    }
-    
+/*
+fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
+
+
+}); //fin del readFile
+*/
+
+
+
 
 /*
 var dataSpliteada=data.split("\n"); //Palabras reservadas separadas en base saltos de linea
@@ -95,10 +101,6 @@ var largoDelTxt=dataSpliteada.length;//cantidad de elementos de dataSpliteada
         
     }
 */
-}); //fin del readFile
-
-
-
 
 //ejemplos de tokens con practica
 /*
