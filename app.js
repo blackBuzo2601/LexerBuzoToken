@@ -17,6 +17,8 @@
     data: se utiliza para almacenar los datos o el resultado de la operacion
     */
     fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
+
+        
     var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'"
     //variables necesarias
     var caracterVacio=" ";
@@ -24,20 +26,33 @@
     var formarPalabra="";
     var caracteresDiferentes=",'=";
 
+
     //Bucle for GENERAL
     for(let i=0;i<query.length;i++){
         letraActual=query[i]; //almacena la letra
-        
         if(letraActual!=caracterVacio){ //primero evalua si el caracter SI es un caracter
 
             if(caracteresDiferentes.includes(letraActual)){ //evalua si es un caracterEspecial
                 if(formarPalabra==""){ //en caso de que haya habido varios espacios en blanco
                     formarPalabra="";   
                     console.log(letraActual); //solo imprime la letraActual (que corresponde a un caracter Especial)
-
+                    
+                    mensaje=""+letraActual;
+                    fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
+                        if (err) throw err;
+                    });
                 }else{ //si habia una palabra construida previamente entrará en esta condición
                     console.log(formarPalabra); //imprimirá la palabra previamente construida
+                        mensaje=""+formarPalabra;
+                        fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
+                            if (err) throw err;
+                        });
+
                     console.log(letraActual);   //imprimirá después el caracter especial
+                        mensaje=""+letraActual;
+                        fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
+                            if (err) throw err;
+                        });
                     formarPalabra="";           //reiniciará la variable para volver a construir otra palabra
                                                 //en la siguiente iteracion.
                 }   
@@ -51,6 +66,11 @@
                 formarPalabra="";
             }else{ //esto se corre si formarPalabra tiene puras letras
                 console.log(formarPalabra);
+
+                    mensaje=""+formarPalabra;
+                        fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
+                            if (err) throw err;
+                        });
                 formarPalabra="";
             }    
         }//fin segundo condicional
@@ -59,10 +79,29 @@
 
     if(query[query.length-1]!=" "){ //evalua si el ultimo caracter del query es diferente de vacio. Para imprimir la palabra formada
         console.log(formarPalabra);
+            mensaje=""+formarPalabra;
+            fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
+                if (err) throw err;
+            });
     }
     
 
+/*
+var dataSpliteada=data.split("\n"); //Palabras reservadas separadas en base saltos de linea
+var largoDelTxt=dataSpliteada.length;//cantidad de elementos de dataSpliteada
+
+    for (let m=0;m<largoDelTxt;m++){ //bucle for que evalua tokens
+        
+        
+    }
+*/
+}); //fin del readFile
+
+
+
+
 //ejemplos de tokens con practica
+/*
     const tokens= {
         "Uno" : 1,
         "Dos" : 2,
@@ -75,11 +114,8 @@
 var palabra = "Siete";
 var tokenActual= tokens[palabra];
 console.log(tokenActual);
+const cantidadDeTokens = Object.keys(tokens).length;
+console.log("la cantidad de tokens es: "+cantidadDeTokens);
+*/
 
-
-
-
-
-
-}); //fin del readFile
 
