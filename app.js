@@ -3,6 +3,8 @@
 //21 de Octubre de 2023, Ensenada B.C
 //NOTA 1: Estoy intentando hacer el mismo lexer anterior, pero esta vez evaluando caracter por caracter
 //e intentare que esta vez imprima bien las palabras sin saltos de linea adicionales. Osea bien.
+//NOTA 2: Funciona como deberia funcionar el Lexer anterior. Es momento de programar lo
+//correspondiente a los tokens del arhivo sqlkeywords.txt
 
 /*  usamos el modulo fs de Node.js
     con require ('fs) se esta importando el modulo 
@@ -59,6 +61,21 @@
         console.log(formarPalabra);
     }
     
+
+//ejemplos de tokens con practica
+    const tokens= {
+        "Uno" : 1,
+        "Dos" : 2,
+        "Tres": 3,
+        "Cuatro":4,
+        "Cinco":5,
+        "Siete":7,
+    };
+
+var palabra = "Siete";
+var tokenActual= tokens[palabra];
+console.log(tokenActual);
+
 
 
 
