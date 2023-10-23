@@ -30,7 +30,7 @@ trabajar con ese mismo archivo para lo de los tokens.
     //variables necesarias bucle for 2
     var keywordsSplit="";
     var keywordActual="";
-    const numerosPermitidos=1234567890;
+    const numerosPermitidos="1234567890";
 
     //variables necesarias bucle for 3
     var queryLogSpliteado="";
@@ -97,11 +97,16 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
         for(let j=0;j<keywordsSplit.length;j++){
             keywordActual=keywordsSplit[j]; //linea actual o keyword actual
             
-            if(keywordActual[0].includes(numerosPermitidos)){
-                console.log("Del keyword de la posicion "+j+" si empieza con un numero:  "+keywordActual);
+            if(numerosPermitidos.includes(keywordActual[0])){ //primero evalua que empiece con numeros
+                
+
+
+
             }else{
-                console.log("Del keyword de la posicion "+j+" No empieza con un numero:  "+keywordActual);
+                //No es un Token Valido porque debe de empezar con un numero asi que no realiza nada.
             }
+        
+
         }
 
 
