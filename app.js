@@ -22,14 +22,21 @@ trabajar con ese mismo archivo para lo de los tokens.
     */
     
     var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'"
-    //variables necesarias
+    //variables necesarias bucle for 1
     var caracterVacio=" ";
     var letraActual="";
     var formarPalabra="";
     var caracteresDiferentes=",'=";
+    //variables necesarias bucle for 2
+    var keywordsSplit="";
+    var keywordActual="";
+    const numerosPermitidos=1234567890;
 
+    //variables necesarias bucle for 3
+    var queryLogSpliteado="";
+    var  miToken;
 
-    //Bucle for GENERAL
+    //Primer Bucle for GENERAL
     for(let i=0;i<query.length;i++){
         letraActual=query[i]; //almacena la letra
         if(letraActual!=caracterVacio){ //primero evalua si el caracter SI es un caracter
@@ -78,17 +85,45 @@ trabajar con ese mismo archivo para lo de los tokens.
             }    
         }//fin segundo condicional
           
-        
-    }//fin bucle for general
+    }//fin primer bucle for general
  
 
-/*
+//ASIGNACION DE TOKENS
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
+        console.log("\n================================================\nComienza la segunda seccion del codigo");
+        keywordsSplit=data.split("\n"); //separar por saltos de linea
+       
+        //Segundo bucle for General
+        for(let j=0;j<keywordsSplit.length;j++){
+            keywordActual=keywordsSplit[j]; //linea actual o keyword actual
+            
+            if(keywordActual[0].includes(numerosPermitidos)){
+                console.log("Del keyword de la posicion "+j+" si empieza con un numero:  "+keywordActual);
+            }else{
+                console.log("Del keyword de la posicion "+j+" No empieza con un numero:  "+keywordActual);
+            }
+        }
 
 
 }); //fin del readFile
-*/
 
+
+
+
+
+
+/*
+//Nota: el archivo log crea un renglon adicional al ultimo NO SE PORQUE pero lo debo corregir
+fs.readFile('queryAprobado.log','utf8', (err, data) => {
+        console.log("\n================================================\nComienza la tercera seccion del codigo");
+        queryLogSpliteado=data.split("\n"); //separar data en base saltos de linea
+   
+
+        for(let j=0;j<queryLogSpliteado.length;j++){ //segundo bucle for general
+            
+        }
+
+}); //fin del readFile*/
 
 
 
