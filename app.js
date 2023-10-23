@@ -101,19 +101,25 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
 
             if(numerosPermitidos.includes(keywordActual[0])){ //primero evalua que empiece con numeros
                 keywordLetraActual++;
-                if(numerosPermitidos.includes(keywordActual=[keywordLetraActual])){
-                    while(numerosPermitidos.includes(keywordActual=[keywordLetraActual])){
-                        console.log("Del dato:   "+keywordActual+" el indice "+keywordLetraActual+" si es numerico");
+                    while(numerosPermitidos.includes(keywordActual[keywordLetraActual])){
+                        console.log("Del dato: "+keywordActual+" el indice "+keywordLetraActual+" si es numerico");
                         keywordLetraActual++;
                     }
-                }
-            }else{
+                    //despues de salir del while ahora evalua que el mas reciente caracter sea numerico
+                    if(keywordActual[keywordLetraActual]==" "){
+                       console.log("Es correcto que haya un espacio: ");
+                    }else{
+                        console.log("Error. Aqui deberia haber un espaco ");
+                    }
+                
+
+
+
+            }else{//Debe empezar con numeroas asi que si no empieza con numeros no sirve.
                 console.log("El token "+j+" no es valido");
             }
         
-
-        }
-
+        }//fin bucle for
 
 }); //fin del readFile
 
