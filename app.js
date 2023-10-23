@@ -15,7 +15,7 @@
     data: se utiliza para almacenar los datos o el resultado de la operacion
     */
     fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
-    var query="'SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'";
+    var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'"
     //variables necesarias
     var caracterVacio=" ";
     var letraActual="";
@@ -29,20 +29,22 @@
         if(letraActual!=caracterVacio){ //primero evalua si el caracter SI es un caracter
 
             if(caracteresDiferentes.includes(letraActual)){ //evalua si es un caracterEspecial
-                if(formarPalabra==""){
-                    formarPalabra="";
-                }else{
-                    console.log(formarPalabra);
-                    console.log(letraActual);
-                    formarPalabra="";
+                if(formarPalabra==""){ //en caso de que haya habido varios espacios en blanco
+                    formarPalabra="";   
+                    console.log(letraActual); //solo imprime la letraActual (que corresponde a un caracter Especial)
+
+                }else{ //si habia una palabra construida previamente entrará en esta condición
+                    console.log(formarPalabra); //imprimirá la palabra previamente construida
+                    console.log(letraActual);   //imprimirá después el caracter especial
+                    formarPalabra="";           //reiniciará la variable para volver a construir otra palabra
+                                                //en la siguiente iteracion.
                 }   
-            }else{
+            }else{ //si es un caracter comun y corriente, entrará aquí
                 formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
             }
         }//fin primer condicional
-        
-
-        if(letraActual==caracterVacio){//después evalua si el caracter es vacio o " "
+    
+        if(letraActual==caracterVacio){//aqui entra cuando el caracter es vacio.
             if(formarPalabra==""){ 
                 formarPalabra="";
             }else{ //esto se corre si formarPalabra tiene puras letras
