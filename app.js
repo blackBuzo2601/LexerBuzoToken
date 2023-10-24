@@ -38,6 +38,7 @@ trabajar con ese mismo archivo para lo de los tokens.
     var banderaEspacios=0;
     var formarPalabraReservada="";
     var palabraReservadaConstruida="";
+    const guionBajo="_"
     var numeroYPalabra="";
 
 
@@ -104,6 +105,7 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
             banderaEspacios=0;
             banderaDosPuntos=0;
             formarPalabraReservada="";
+            palabraReservadaConstruida="";
 
             for(l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
                 
@@ -128,17 +130,22 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                    formarPalabraReservada=formarPalabraReservada+keywordActual[l];
                }
             }//fin bucle for de letras
-
-            console.log(formarNumero);
+           
+            //evaluar la palabra construida para retirar caracteres especiales
             for (b=0;b<formarPalabraReservada.length;b++){
                 if(caracteresDiferentes.includes(formarPalabraReservada[b])){
-                    palabraReservadaConstruida=formarPalabraReservada.split(formarPalabraReservada[b])
-
+                    if(guionBajo.includes(formarPalabraReservada[b])){
+                        palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                    }
+                    //sino no realizar operacion alguna pues entonces
+                }else{
+                    palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
                 }
             }
+            console.log(formarNumero);
+            console.log(palabraReservadaConstruida);
 
         }//fin bucle for general
-
 
 }); //fin del readFile
 
