@@ -28,16 +28,14 @@ trabajar con ese mismo archivo para lo de los tokens.
     var formarPalabra="";
     var caracteresDiferentes=",'=";
     //variables necesarias bucle for 2
-    var keywordsSplit="";
-    var keywordActual="";
-    var keywordLetraActual=0;
     const numerosPermitidos="1234567890";
+    var keywordsSplit="";
+    var keywordActual="";    
+    var keywordActualLetraActual="";
+    var formarNumero="";
+    var arregloTokens={};
 
-    //variables necesarias bucle for 3
-    var queryLogSpliteado="";
-    var  miToken;
-
-    //Primer Bucle for GENERAL
+    //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
         letraActual=query[i]; //almacena la letra
         if(letraActual!=caracterVacio){ //primero evalua si el caracter SI es un caracter
@@ -89,71 +87,25 @@ trabajar con ese mismo archivo para lo de los tokens.
     }//fin primer bucle for general
  
 
-//ASIGNACION DE TOKENS
+//DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt en base de comillas dobles
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
         console.log("\n================================================\nComienza la segunda seccion del codigo");
-        keywordsSplit=data.split("\n"); //separar por saltos de linea
-       
-        //Segundo bucle for General
-        for(let j=0;j<keywordsSplit.length;j++){
-            keywordActual=keywordsSplit[j]; //palabra o keyword actual
-            keywordLetraActual=0;  //posicion numerico
-
-            if(numerosPermitidos.includes(keywordActual[0])){ //primero evalua que empiece con numeros
-                keywordLetraActual++;
-                    while(numerosPermitidos.includes(keywordActual[keywordLetraActual])){
-                        console.log("Del dato: "+keywordActual+" el indice "+keywordLetraActual+" si es numerico");
-                        keywordLetraActual++;
-                    }
-                    //despues de salir del while ahora evalua que el mas reciente caracter sea numerico
-                    if(keywordActual[keywordLetraActual]==" "){
-                       console.log("Es correcto que haya un espacio: ");
-                    }else{
-                        console.log("Error. Aqui deberia haber un espaco ");
-                    }
-                
-
-
-
-            }else{//Debe empezar con numeroas asi que si no empieza con numeros no sirve.
-                console.log("El token "+j+" no es valido");
-            }
+        keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
         
-        }//fin bucle for
+        for(let k=0;k<keywordsSplit.length;k++){//bucle for general
+            keywordActual=keywordsSplit[k]; //palabra actual
+            for(l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
+                console.log("La letra ("+keywordActual[l]+") pertenece a la posicion"+l);
+            }
+
+
+        }//fin bucle for general
+
+
 
 }); //fin del readFile
 
 
-
-
-
-
-/*
-//Nota: el archivo log crea un renglon adicional al ultimo NO SE PORQUE pero lo debo corregir
-fs.readFile('queryAprobado.log','utf8', (err, data) => {
-        console.log("\n================================================\nComienza la tercera seccion del codigo");
-        queryLogSpliteado=data.split("\n"); //separar data en base saltos de linea
-   
-
-        for(let j=0;j<queryLogSpliteado.length;j++){ //segundo bucle for general
-            
-        }
-
-}); //fin del readFile*/
-
-
-
-/*
-var dataSpliteada=data.split("\n"); //Palabras reservadas separadas en base saltos de linea
-var largoDelTxt=dataSpliteada.length;//cantidad de elementos de dataSpliteada
-
-    for (let m=0;m<largoDelTxt;m++){ //bucle for que evalua tokens
-        
-        
-    }
-*/
-
-//ejemplos de tokens con practica
 /*
     const tokens= {
         "Uno" : 1,
