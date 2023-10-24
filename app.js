@@ -30,6 +30,7 @@ trabajar con ese mismo archivo para lo de los tokens.
     caracteresDiferentes=caracteresDiferentes+'"';
     //variables necesarias bucle for 2
     const numerosPermitidos="1234567890";
+    const abecedario="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" //minusculas y mayusculas porque no quiero complicarme la neta
     const dosPuntos=":";
     var keywordsSplit="";
     var keywordActual="";    
@@ -38,9 +39,10 @@ trabajar con ese mismo archivo para lo de los tokens.
     var banderaEspacios=0;
     var formarPalabraReservada="";
     var palabraReservadaConstruida="";
+    var palabraReservadaConstruidaSinEspacios="";   //en esta variable almacenaremos la original y usaremos trim() para retirar espacios vacios.
     const guionBajo="_"
-    var numeroYPalabra="";
-
+    var caracterEspecialUnico="";
+    var todosMisTokens={};
 
     //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
@@ -94,12 +96,13 @@ trabajar con ese mismo archivo para lo de los tokens.
     }//fin primer bucle for general
  
 
+
 //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt en base de comillas dobles
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
         console.log("\n================================================\nComienza la segunda seccion del codigo");
         keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
         
-        for(let k=0;k<keywordsSplit.length;k++){//bucle for general
+        for(let k=0;k<keywordsSplit.length;k++){//SEGUNDO BUCLE FOR GENERAL
             keywordActual=keywordsSplit[k]; //almacena cada apalabra
             formarNumero="";
             banderaEspacios=0;
@@ -118,7 +121,7 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
 
                 if(keywordActual[l]==" "){
                     if(banderaEspacios==0){
-                        banderaEspacios++;
+                        banderaEspacios++; //se produjo el primer espacio
                     }
                 }
 
@@ -131,40 +134,35 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                }
             }//fin bucle for de letras
            
-            //evaluar la palabra construida para retirar caracteres especiales
+        
+            //EVALUAR LA PALABRA CONSTRUIDA PARA RETIRAR CARACTERES ESPECIALES
             for (b=0;b<formarPalabraReservada.length;b++){
+                
                 if(caracteresDiferentes.includes(formarPalabraReservada[b])){
-                    if(guionBajo.includes(formarPalabraReservada[b])){
+                    if(guionBajo.includes(formarPalabraReservada[b])){ //para incluir los "_" en la palabra reservada.
                         palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
                     }
+                    if(caracterVacio.includes(formarPalabraReservada[b])){ //para incluir los caracteres vacios
+                        palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                    }
+
+                    
                     //sino no realizar operacion alguna pues entonces
+
                 }else{
                     palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
                 }
-            }
-            console.log(formarNumero);
-            console.log(palabraReservadaConstruida);
 
+            }//fin for que evalua palabra construida para retirar caracteres especiales.
+            palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
+            todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
+            console.log(formarNumero);
+            console.log(palabraReservadaConstruidaSinEspacios);
+            
         }//fin bucle for general
 
+        
+      console.log(todosMisTokens); // imprimir las palabras clave y valor del objeto todosMisTokens
+
 }); //fin del readFile
-
-
-/*
-    const tokens= {
-        "Uno" : 1,
-        "Dos" : 2,
-        "Tres": 3,
-        "Cuatro":4,
-        "Cinco":5,
-        "Siete":7,
-    };
-
-var palabra = "Siete";
-var tokenActual= tokens[palabra];
-console.log(tokenActual);
-const cantidadDeTokens = Object.keys(tokens).length;
-console.log("la cantidad de tokens es: "+cantidadDeTokens);
-*/
-
 
