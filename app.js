@@ -26,7 +26,8 @@ trabajar con ese mismo archivo para lo de los tokens.
     var caracterVacio=" ";
     var letraActual="";
     var formarPalabra="";
-    var caracteresDiferentes=",'=";
+    var caracteresDiferentes="._,-'';*+/=()<>!%$@&|^`~?:'[]";
+    caracteresDiferentes=caracteresDiferentes+'"';
     //variables necesarias bucle for 2
     const numerosPermitidos="1234567890";
     const dosPuntos=":";
@@ -36,7 +37,10 @@ trabajar con ese mismo archivo para lo de los tokens.
     var banderaDosPuntos=0;
     var banderaEspacios=0;
     var formarPalabraReservada="";
-    var arregloTokens={};
+    var palabraReservadaConstruida="";
+    var numeroYPalabra="";
+
+
     //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
         letraActual=query[i]; //almacena la letra
@@ -100,32 +104,40 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
             banderaEspacios=0;
             banderaDosPuntos=0;
             formarPalabraReservada="";
-            
+
             for(l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
-                if(numerosPermitidos.includes(keywordActual[l])){
-                    formarNumero=formarNumero+keywordActual[l];
+                
+                if(banderaEspacios==0){
+                    if(numerosPermitidos.includes(keywordActual[l])){
+                        formarNumero=formarNumero+keywordActual[l];
+                    }
                 }
+                
 
                 if(keywordActual[l]==" "){
                     if(banderaEspacios==0){
-                        console.log(formarNumero);
                         banderaEspacios++;
                     }
                 }
 
                 if(keywordActual[l]==dosPuntos){
-                    console.log("Del dato: "+keywordActual+" se encontro un ':' en la posicion: "+l);
                     banderaDosPuntos++;
                 }
 
-                if(banderaDosPuntos==1){
-                    formarPalabraReservada=formarPalabraReservada+keywordActual[l];
-                }
+                if(banderaDosPuntos==1){ //cuando ya hubo un ":" significa que a partir de ahi empieza la expresion
+                   formarPalabraReservada=formarPalabraReservada+keywordActual[l];
+               }
             }//fin bucle for de letras
-           console.log(formarPalabraReservada);
+
+            console.log(formarNumero);
+            for (b=0;b<formarPalabraReservada.length;b++){
+                if(caracteresDiferentes.includes(formarPalabraReservada[b])){
+                    palabraReservadaConstruida=formarPalabraReservada.split(formarPalabraReservada[b])
+
+                }
+            }
 
         }//fin bucle for general
-
 
 
 }); //fin del readFile
