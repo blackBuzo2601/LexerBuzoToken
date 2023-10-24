@@ -29,12 +29,14 @@ trabajar con ese mismo archivo para lo de los tokens.
     var caracteresDiferentes=",'=";
     //variables necesarias bucle for 2
     const numerosPermitidos="1234567890";
+    const dosPuntos=":";
     var keywordsSplit="";
     var keywordActual="";    
-    var keywordActualLetraActual="";
     var formarNumero="";
+    var banderaDosPuntos=0;
+    var banderaEspacios=0;
+    var formarPalabraReservada="";
     var arregloTokens={};
-
     //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
         letraActual=query[i]; //almacena la letra
@@ -93,11 +95,34 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
         keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
         
         for(let k=0;k<keywordsSplit.length;k++){//bucle for general
-            keywordActual=keywordsSplit[k]; //palabra actual
+            keywordActual=keywordsSplit[k]; //almacena cada apalabra
+            formarNumero="";
+            banderaEspacios=0;
+            banderaDosPuntos=0;
+            formarPalabraReservada="";
+            
             for(l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
-                console.log("La letra ("+keywordActual[l]+") pertenece a la posicion"+l);
-            }
+                if(numerosPermitidos.includes(keywordActual[l])){
+                    formarNumero=formarNumero+keywordActual[l];
+                }
 
+                if(keywordActual[l]==" "){
+                    if(banderaEspacios==0){
+                        console.log(formarNumero);
+                        banderaEspacios++;
+                    }
+                }
+
+                if(keywordActual[l]==dosPuntos){
+                    console.log("Del dato: "+keywordActual+" se encontro un ':' en la posicion: "+l);
+                    banderaDosPuntos++;
+                }
+
+                if(banderaDosPuntos==1){
+                    formarPalabraReservada=formarPalabraReservada+keywordActual[l];
+                }
+            }//fin bucle for de letras
+           console.log(formarPalabraReservada);
 
         }//fin bucle for general
 
