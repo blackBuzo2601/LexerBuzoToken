@@ -41,8 +41,10 @@ trabajar con ese mismo archivo para lo de los tokens.
     var palabraReservadaConstruida="";
     var palabraReservadaConstruidaSinEspacios="";   //en esta variable almacenaremos la original y usaremos trim() para retirar espacios vacios.
     const guionBajo="_"
-    var otroContadorEspacio=0;
+    var espacioActivo=0;
     var todosMisTokens={};
+    var caracterVacio=" ";
+    var posicionCaracterVacio=0;
 
     //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
@@ -102,14 +104,15 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
         console.log("\n================================================\nComienza la segunda seccion del codigo");
         keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
         
-        for(let k=0;k<150;k++){//SEGUNDO BUCLE FOR GENERAL
+        for(let k=0;k<keywordsSplit.length;k++){//SEGUNDO BUCLE FOR GENERAL
             keywordActual=keywordsSplit[k]; //almacena cada apalabra
             formarNumero="";
             banderaEspacios=0;
             banderaDosPuntos=0;
             formarPalabraReservada="";
             palabraReservadaConstruida="";
-            otroContadorEspacio=0;
+            espacioActivo=0;
+            posicionCaracterVacio=0;
 
             for(l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
                 
@@ -138,38 +141,30 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
         
             //EVALUAR LA PALABRA CONSTRUIDA PARA RETIRAR CARACTERES ESPECIALES
             for (b=0;b<formarPalabraReservada.length;b++){
-                
+            
                 if(caracteresDiferentes.includes(formarPalabraReservada[b])){
-                    if(otroContadorEspacio==1){
-                        palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
-                    }else{
-                        if(formarPalabraReservada[b]==guionBajo || formarPalabraReservada[b]==caracterVacio){
-                            if(guionBajo.includes(formarPalabraReservada[b])){ //para incluir los "_" en la palabra reservada.
-                                palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
-                            }
-                            if(caracterVacio.includes(formarPalabraReservada[b])){ //para incluir los caracteres vacios
-                                palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
-                                otroContadorEspacio++;
-                            }
+                        if(formarPalabraReservada[b]==guionBajo){                                                                                      
+                                palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b]; //para incluir los "_" en la palabra reservada.
                         }
+
                         //sino no realizar operacion alguna pues entonces
-                }
             }else{
-                if(formarPalabraReservada[b]==caracterVacio){
-                    otroContadorEspacio++
-                }
                 palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+
             }
+
+
+            
+
         }//fin for que evalua palabra construida para retirar caracteres especiales.
 
-            palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //retirar espacios vacios de la palabra
-            
-   //         todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
-            console.log(formarNumero+" su valor es: "+palabraReservadaConstruidaSinEspacios);
+            palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
+            todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
+            console.log(formarNumero);
+            console.log(palabraReservadaConstruidaSinEspacios);
             
         }//FIN SEGUNDO BUCLE FOR GENERAL
-
-   //   console.log(todosMisTokens); // imprimir las palabras clave y valor del objeto todosMisTokens
+      console.log(todosMisTokens); // imprimir las palabras clave y valor del objeto todosMisTokens
 
 }); //fin del readFile
 
