@@ -21,7 +21,7 @@ trabajar con ese mismo archivo para lo de los tokens.
     data: se utiliza para almacenar los datos o el resultado de la operacion
     */
     
-    var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'"
+    var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'";
     //variables necesarias bucle for 1
     var caracterVacio=" ";
     var letraActual="";
@@ -56,19 +56,19 @@ trabajar con ese mismo archivo para lo de los tokens.
                     formarPalabra="";   
                     console.log(letraActual); //solo imprime la letraActual (que corresponde a un caracter Especial)
                     
-                    mensaje='"'+letraActual+'"';
+                    mensaje=letraActual;
                     fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                         if (err) throw err;
                     });
                 }else{ //si habia una palabra construida previamente entrará en esta condición
                     console.log(formarPalabra); //imprimirá la palabra previamente construida
-                        mensaje='"'+formarPalabra+'"';
+                        mensaje=formarPalabra;
                         fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                             if (err) throw err;
                         });
 
                     console.log(letraActual);   //imprimirá después el caracter especial
-                        mensaje='"'+letraActual+'"';
+                        mensaje=letraActual;
                         fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                             if (err) throw err;
                         });
@@ -87,7 +87,7 @@ trabajar con ese mismo archivo para lo de los tokens.
             }else{ //esto se corre si formarPalabra tiene puras letras
                 console.log(formarPalabra);
 
-                    mensaje='"'+formarPalabra+'"';
+                    mensaje=formarPalabra;
                         fs.appendFile('queryAprobado.log', mensaje + '\n', (err) => {
                             if (err) throw err;
                         });
@@ -99,9 +99,8 @@ trabajar con ese mismo archivo para lo de los tokens.
  
 
 
-//DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt en base de comillas dobles
+//DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
-        console.log("\n================================================\nComienza la segunda seccion del codigo");
         keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
         
         for(let k=0;k<keywordsSplit.length;k++){//SEGUNDO BUCLE FOR GENERAL
@@ -114,7 +113,7 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
             espacioActivo=0;
             posicionCaracterVacio=0;
 
-            for(l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
+            for(let l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
                 
                 if(banderaEspacios==0){
                     if(numerosPermitidos.includes(keywordActual[l])){
@@ -140,7 +139,7 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
            
         
             //EVALUAR LA PALABRA CONSTRUIDA PARA RETIRAR CARACTERES ESPECIALES
-            for (b=0;b<formarPalabraReservada.length;b++){
+            for (let b=0;b<formarPalabraReservada.length;b++){
             
                 if(caracteresDiferentes.includes(formarPalabraReservada[b])){
                         if(formarPalabraReservada[b]==guionBajo){                                                                                      
@@ -153,18 +152,36 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
 
             }
 
-
-            
-
         }//fin for que evalua palabra construida para retirar caracteres especiales.
 
-            palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
-            todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
-            console.log(formarNumero);
-            console.log(palabraReservadaConstruidaSinEspacios);
             
-        }//FIN SEGUNDO BUCLE FOR GENERAL
-      console.log(todosMisTokens); // imprimir las palabras clave y valor del objeto todosMisTokens
+            palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
 
-}); //fin del readFile
+
+            //ASIGNACIÓN DE TOKENS. Cada palabra reservada tiene un numero asignado.
+            todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
+
+ }//FIN SEGUNDO BUCLE FOR GENERAL
+  
+//IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
+        fs.readFile('queryAprobado.log','utf8', (err, data) => {
+            console.log("Comienza el lugar donde se lee el archivo queryAprobado.log");
+            //console.log(todosMisTokens); // imprimir las palabras clave y valor del objeto todosMisTokens
+
+            queryDataSpliteado=data.split("\n");
+            
+            
+
+            
+            
+            console.log(queryDataSpliteado);
+
+
+
+        }); //fin del readFile que lee QueryAprobado.log
+
+
+}); //fin del readFile GENERAL que lee el archivo sqlkeyword.txt
+
+
 
