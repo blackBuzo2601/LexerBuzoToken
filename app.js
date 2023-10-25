@@ -8,7 +8,7 @@ NOTA 2: Funciona como deberia funcionar el Lexer anterior. Es momento de program
 correspondiente a los tokens del arhivo sqlkeywords.txt
 NOTA 3: Lo mismo que imprime en consola, lo almacena en un archivo log, lo que me permitira
 trabajar con ese mismo archivo para lo de los tokens.
-*/
+*/ 
 
 /*  Usamos el modulo fs de Node.js
     con require ('fs) se esta importando el modulo 
