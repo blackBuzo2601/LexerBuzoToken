@@ -41,10 +41,10 @@ trabajar con ese mismo archivo para lo de los tokens.
     var palabraReservadaConstruida="";
     var palabraReservadaConstruidaSinEspacios="";   //en esta variable almacenaremos la original y usaremos trim() para retirar espacios vacios.
     const guionBajo="_"
-    var espacioActivo=0;
     var todosMisTokens={};
     var caracterVacio=" ";
-    var posicionCaracterVacio=0;
+    var queryDataActual="";
+    var banderaPalabraEncontrada=false;
 
     //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
@@ -160,23 +160,39 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
 
             //ASIGNACIÓN DE TOKENS. Cada palabra reservada tiene un numero asignado.
             todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
-
+            
  }//FIN SEGUNDO BUCLE FOR GENERAL
-  
+
+//EN ESTE PUNTO LA VARIABLE formarNumero no se reinicia. Esta variable está almacenando el ultimo numero con el
+//que se trabajo para la asignación de tokens. En este punto la variable vale 816. Quiere decir que son 816 veces
+//que ocuparemos recorrer el objeto todosMisTokens para saber el token al que corresponde una palabra reservada.
+
 //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
         fs.readFile('queryAprobado.log','utf8', (err, data) => {
             console.log("Comienza el lugar donde se lee el archivo queryAprobado.log");
-            //console.log(todosMisTokens); // imprimir las palabras clave y valor del objeto todosMisTokens
-
             queryDataSpliteado=data.split("\n");
-            
-            
 
-            
-            
-            console.log(queryDataSpliteado);
-
-
+            //Tercer bucle for General que trabaja sobre cada elemento de queryAprobado.log
+            for(let m=0;m<queryDataSpliteado.length-1;m++){ 
+                banderaPalabraEncontrada=false;
+                queryDataActual=queryDataSpliteado[m]; //almacena cada elemento de QueryAprobado.log
+                
+                for(let n=0;n<formarNumero;n++){ //formarNumero vale 816 (el ultimo token de la lista)
+                    if(banderaPalabraEncontrada==false){
+                        if(queryDataActual==todosMisTokens[n]){
+                            console.log("La palabra reservada "+queryDataActual+" corresponde al token: "+n);
+                            banderaPalabraEncontrada=true;
+                        }
+                    }
+                } //fin sub ciclo for
+        
+                if(banderaPalabraEncontrada==false){
+                    console.log("("+queryDataActual+") NO es una palabra reservada");
+                }
+                    
+            }//fin del tercer bucle for generla
+        
+     
 
         }); //fin del readFile que lee QueryAprobado.log
 
