@@ -20,7 +20,16 @@ trabajar con ese mismo archivo para lo de los tokens.
     err: se utiliza para almacenar cualquier error que ocurra durante la operacion.
     data: se utiliza para almacenar los datos o el resultado de la operacion
     */
-    
+
+//Eliminar los datos en el archivo si es que el archivo tiene datos
+fs.truncate('queryAprobado.log', 0, (err) => {
+    if (err) {
+        console.error('Error al borrar el contenido del archivo: ', err); //puede ocurrir si el archivo no exite.
+    } else {
+        console.log('=====================================================\nContenido de queryAprobado.log borrado correctamente.\n=====================================================\n');
+    }
+});
+
     var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'";
     //variables necesarias bucle for 1
     var caracterVacio=" ";
@@ -149,7 +158,6 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                         //sino no realizar operacion alguna pues entonces
             }else{
                 palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
-
             }
 
         }//fin for que evalua palabra construida para retirar caracteres especiales.
@@ -168,8 +176,12 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
 //que ocuparemos recorrer el objeto todosMisTokens para saber el token al que corresponde una palabra reservada.
 
 //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
+
         fs.readFile('queryAprobado.log','utf8', (err, data) => {
             console.log("Comienza el lugar donde se lee el archivo queryAprobado.log");
+            
+          
+
             queryDataSpliteado=data.split("\n");
 
             //Tercer bucle for General que trabaja sobre cada elemento de queryAprobado.log

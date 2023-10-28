@@ -1,0 +1,15 @@
+SELECT
+edad
+correo
+,
+sueldo
+FROM
+usuarios
+WHERE
+nombre
+=
+'
+juan
+,
+pedro
+'
