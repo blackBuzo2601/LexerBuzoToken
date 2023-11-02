@@ -54,6 +54,8 @@ fs.truncate('queryAprobado.log', 0, (err) => {
     var caracterVacio=" ";
     var queryDataActual="";
     var banderaPalabraEncontrada=false;
+    var contadorCaracteresEspeciales=0;
+    var contadorDosPuntos=0;
 
     //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
@@ -89,6 +91,9 @@ fs.truncate('queryAprobado.log', 0, (err) => {
             }
         }//fin primer condicional
     
+    
+        
+
         //segundo condicional
         if(letraActual==caracterVacio){//aqui entra cuando el caracter es vacio.
             if(formarPalabra==""){ 
@@ -141,20 +146,30 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                     banderaDosPuntos++;
                 }
 
-                if(banderaDosPuntos==1){ //cuando ya hubo un ":" significa que a partir de ahi empieza la expresion
+                if(banderaDosPuntos>=1){ //cuando ya hubo un ":" significa que a partir de ahi empieza la expresion
                    formarPalabraReservada=formarPalabraReservada+keywordActual[l];
                }
             }//fin bucle for de letras
            
         
+            //---------------------------------------------------------------\\
             //EVALUAR LA PALABRA CONSTRUIDA PARA RETIRAR CARACTERES ESPECIALES
+            contadorDosPuntos=0;
             for (let b=0;b<formarPalabraReservada.length;b++){
-            
+
                 if(caracteresDiferentes.includes(formarPalabraReservada[b])){
+                        
+                        if(formarPalabraReservada[b]==dosPuntos){
+                            contadorDosPuntos++
+                        }
+                        if(contadorDosPuntos==2){
+                            palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                        }
+
                         if(formarPalabraReservada[b]==guionBajo){                                                                                      
                                 palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b]; //para incluir los "_" en la palabra reservada.
                         }
-
+                        
                         //sino no realizar operacion alguna pues entonces
             }else{
                 palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
@@ -164,7 +179,7 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
 
             
             palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
-
+            
 
             //ASIGNACIÓN DE TOKENS. Cada palabra reservada tiene un numero asignado.
             todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
@@ -203,8 +218,8 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                 }
                     
             }//fin del tercer bucle for generla
-        
-     
+           
+            
 
         }); //fin del readFile que lee QueryAprobado.log
 
