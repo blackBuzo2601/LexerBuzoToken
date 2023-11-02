@@ -30,17 +30,18 @@ fs.truncate('queryAprobado.log', 0, (err) => {
         console.log('=====================================================\nContenido de queryAprobado.log borrado correctamente.\n=====================================================\n');
     }
 });
-
-    var query="SELECT edad correo,sueldo FROM usuarios WHERE nombre='juan, pedro'";
-    //variables necesarias bucle for 1
+    //QUERY CON EL QUE SE VA A TRABAJAR
+    var query="select edad correo,sueldo from usuarios where nombre='juan, pedro'";
+    
+    //TODAS LAS VARIABLES NECESARIAS
     var caracterVacio=" ";
     var letraActual="";
     var formarPalabra="";
     var caracteresDiferentes="._,-'';*+/=()<>!%$@&|^`~?:'[]";
-    caracteresDiferentes=caracteresDiferentes+'"';
+    caracteresDiferentes=caracteresDiferentes+'"'; //para que almacene tambien el caracter "
     const numerosPermitidos="1234567890";
     const abecedario="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" //minusculas y mayusculas porque no quiero complicarme la neta
-    const dosPuntos=":";
+    const dosPuntos=":"; //para considerar también ":" como un caracter con token valido
     var keywordsSplit="";
     var keywordActual="";    
     var formarNumero="";
@@ -50,7 +51,7 @@ fs.truncate('queryAprobado.log', 0, (err) => {
     var palabraReservadaConstruida="";
     var palabraReservadaConstruidaSinEspacios="";   //en esta variable almacenaremos la original y usaremos trim() para retirar espacios vacios.
     const guionBajo="_"
-    var todosMisTokens={};
+    var todosMisTokens={}; //arreglo que almacenará todas las palabras reservadas con su numero correspondiente
     var caracterVacio=" ";
     var queryDataActual="";
     var banderaPalabraEncontrada=false;
@@ -58,8 +59,13 @@ fs.truncate('queryAprobado.log', 0, (err) => {
     var contadorDosPuntos=0;
     var contieneAbecedario=0;
 
-
+    console.log("IMPRESIÓN DE LOS ELEMENTOS DE QUERY SEPARADOS POR SALTOS DE LINEA:\n======================================================================\n");
+    //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //PRIMER BUCLE FOR GENERAL
+    //Este bucle lo que va a hacer es la construcción de todos los elementos  de "query" considerando los espacios,
+    //y los caracteres individuales. Imprimirá separados por saltos de linea y los almacenará en un archivo denominado
+    //queryAprobado.log. Con este archivo se trabajará mas adelante para buscar el token correspondiente de los elementos.
+
     for(let i=0;i<query.length;i++){
         letraActual=query[i]; //almacena la letra
         if(letraActual!=caracterVacio){ //primero evalua si el caracter SI es un caracter
@@ -91,13 +97,13 @@ fs.truncate('queryAprobado.log', 0, (err) => {
             }else{ //si es un caracter comun y corriente, entrará aquí
                 formarPalabra=formarPalabra+letraActual; //va construyendo la palabra hasta encontrar un espacio
             }
-        }//fin primer condicional
+        }//fin primer condicional que evalua si es un caracter
     
-        //segundo condicional
-        if(letraActual==caracterVacio){//aqui entra cuando el caracter es vacio.
-            if(formarPalabra==""){ 
+        //SEGUNDO CONDICIONAL
+        if(letraActual==caracterVacio){//aqui entra cuando el caracter es vacio. (" ")
+            if(formarPalabra==""){  //si formarPalabra no tiene nada pues no va a realizar nada. Osea no va a imprimir ese espacio vacio en la consola
                 formarPalabra="";
-            }else{ //esto se corre si formarPalabra tiene puras letras
+            }else{ //esto se corre si formarPalabra contiene caracteres y aqui se forma la palabra puesto que se encuentra un espacio
                 console.log(formarPalabra);
 
                     mensaje=formarPalabra;
@@ -106,50 +112,55 @@ fs.truncate('queryAprobado.log', 0, (err) => {
                         });
                 formarPalabra="";
             }    
-        }//fin segundo condicional
+        }//FIN SEGUNDO CONDICIONAL
           
-    }//fin primer bucle for general
- 
+    }//FIN PRIMER BUCLE FOR GENERAL
+
+ //------------------------------------------------------------------------------------------------------------------------
+
 
 //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt
-fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
+fs.readFile('sqlkeywords.txt','utf8', (err, data) => { //se lee el archivo sqlkeywords.txt
         keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
         
-        for(let k=0;k<keywordsSplit.length;k++){//SEGUNDO BUCLE FOR GENERAL
-            keywordActual=keywordsSplit[k]; //almacena cada apalabra
-            formarNumero="";
-            banderaEspacios=0;
-            banderaDosPuntos=0;
-            formarPalabraReservada="";
-            palabraReservadaConstruida="";
-            espacioActivo=0;
-            posicionCaracterVacio=0;
-            contadorCaracteresEspeciales=0;
+        //SEGUNDO BUCLE FOR GENERAL: SE TRABAJA CON CADA UNO DE LOS RENGLONES DE sqlkeywords.txt
+        for(let k=0;k<keywordsSplit.length;k++){
+            keywordActual=keywordsSplit[k]; //almacena cada palabra por cada iteración    
+            formarNumero="";                //               
+            banderaEspacios=0;              //
+            banderaDosPuntos=0;             //
+            formarPalabraReservada="";      //  REINICIO DE VARIABLES por cada iteración
+            palabraReservadaConstruida="";  //        
+            espacioActivo=0;                //
+            posicionCaracterVacio=0;        //
+            contadorCaracteresEspeciales=0; //
 
-            for(let l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
+            //Bucle for subgeneral que evalua cada letra del keywordActual
+            for(let l=0;l<keywordActual.length;l++){
                 
-                if(banderaEspacios==0){
-                    if(numerosPermitidos.includes(keywordActual[l])){
-                        formarNumero=formarNumero+keywordActual[l];
+                if(banderaEspacios==0){ //La primera iteración de este for banderaEspacios siempre vale 0.
+                    if(numerosPermitidos.includes(keywordActual[l])){   //Si el caracter actual es numérico
+                        formarNumero=formarNumero+keywordActual[l];     //entonces se construye el numero del token
                     }
                 }
                 
-                if(keywordActual[l]==" "){
-                    if(banderaEspacios==0){
-                        banderaEspacios++; //se produjo el primer espacio
+                if(keywordActual[l]==" "){ //Cuando encuentra el primer espacio, banderaEspacios de valer 0 pasa a 1.
+                    if(banderaEspacios==0){//entonces cuando banderEspacios==1, no entra este condicional más.
+                        banderaEspacios++; //Cuando entra aquí, significa que ya se produjo el primer espacio.
                     }
                 }
 
-                if(keywordActual[l]==dosPuntos){
+                if(keywordActual[l]==dosPuntos){//Cuando encuentra el primer ":", banderDosPuntos de valer 0 pasa a 1.
                     banderaDosPuntos++;
                 }
 
                 if(banderaDosPuntos>=1){ //cuando ya hubo un ":" significa que a partir de ahi empieza la expresion
                    formarPalabraReservada=formarPalabraReservada+keywordActual[l];
                }
-            }//fin bucle for de letras
+            }//fin bucle for subgeneral que evalua cada letra del keyword actual
             
-contieneAbecedario=0; 
+contieneAbecedario=0; //Reinicio de esta variable.
+
 //Este bucle for recorre cada letra de formarPalabraReservada para ver si tiene caracteres del abecedario.
             for(let z=0;z<formarPalabraReservada.length;z++){
                 if(abecedario.includes(formarPalabraReservada[z])){
@@ -158,22 +169,20 @@ contieneAbecedario=0;
             }
             
             if(contieneAbecedario>=1){ //se corre esto si formarPalabraReservada contiene algo del abecedario
-                    for (let b=0;b<formarPalabraReservada.length;b++){
+                    for (let b=0;b<formarPalabraReservada.length;b++){ //bucle for adicional
                         if(caracteresDiferentes.includes(formarPalabraReservada[b])){
-                                if(formarPalabraReservada[b]==guionBajo){                                                                                      
+                                if(formarPalabraReservada[b]==guionBajo){ //algunas palabras contienen "_", asi que se deben considerar los "_"                                                                                 
                                         palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b]; //para incluir los "_" en la palabra reservada.
                                 }
-                                //sino no realizar operacion alguna pues
+                                //sino es un "_" no se va a realizar nada. Osea, no se consideran otros caracteres individuales.
                         }else{
                         palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
                         }   
-        
-                    }
-
+                    }//fin de bucle for adicional
 
             }else{ //SI NO TIENE LETRAS DEL ABECEDARIO SE CORRE ESTO
                 contadorDosPuntos=0;
-                for (let b=0;b<formarPalabraReservada.length;b++){
+                for (let b=0;b<formarPalabraReservada.length;b++){ //bucle for adicional
                     if(caracteresDiferentes.includes(formarPalabraReservada[b])){
                         
                             if(contadorDosPuntos==1){
@@ -191,38 +200,38 @@ contieneAbecedario=0;
                             if(contadorCaracteresEspeciales>=1){
                                 palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
                             }
-                            
                             //sino no realizar operacion alguna pues entonces
                 }else{
                     palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
                 }
-
-            }
-
-    }//fin condicion de No incluir 
+            }//fin bucle for adicional
+    }//fin condicion de si no se incluyen letras del abedecedario.
     
-            palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
-            //ASIGNACIÓN DE TOKENS. Cada palabra reservada tiene un numero asignado.
-            todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
+        palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
+        //ASIGNACIÓN DE TOKENS. Cada palabra reservada tiene un numero asignado.
+        todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
             
  }//FIN SEGUNDO BUCLE FOR GENERAL
+//---------------------------------------------------------------------------------------------------------------------------------
 
 //EN ESTE PUNTO LA VARIABLE formarNumero no se reinicia. Esta variable está almacenando el ultimo numero con el
 //que se trabajo para la asignación de tokens. En este punto la variable vale 816. Quiere decir que son 816 veces
 //que ocuparemos recorrer el objeto todosMisTokens para saber el token al que corresponde una palabra reservada.
 
 //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
-
-        fs.readFile('queryAprobado.log','utf8', (err, data) => {
+        fs.readFile('queryAprobado.log','utf8', (err, data) => { //leer el query almacenado en queryAprobado.log
             console.log("COMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\n");
             
-            queryDataSpliteado=data.split("\n");
+            queryDataSpliteado=data.toUpperCase();  //Convertir todo el archivo a Mayusculas para no tener problemas con los tokens.
+            queryDataSpliteado=queryDataSpliteado.split("\n"); //separar data en base saltos de lineas.
 
-            //Tercer bucle for General que trabaja sobre cada elemento de queryAprobado.log
+            //TERCER BUCLE FOR GENERAL: Este bucle trabaja sobre cada elemento en base saltos de linea de queryAprobado.log
             for(let m=0;m<queryDataSpliteado.length-1;m++){ 
-                banderaPalabraEncontrada=false;
+                banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
+
                 queryDataActual=queryDataSpliteado[m]; //almacena cada elemento de QueryAprobado.log
                 
+                //Bucle for subgeneral que recorre el objeto todosMisTokens
                 for(let n=0;n<formarNumero;n++){ //formarNumero vale 816 (el ultimo token de la lista)
                     if(banderaPalabraEncontrada==false){
                         if(queryDataActual==todosMisTokens[n]){
@@ -230,18 +239,18 @@ contieneAbecedario=0;
                             banderaPalabraEncontrada=true;
                         }
                     }
-                } //fin sub ciclo for
+                } //fin sub ciclo for que recorre el objeto todosMisTokens
         
                 if(banderaPalabraEncontrada==false){
                     console.log(""+queryDataActual+" NO es una palabra reservada");
                 }
                     
-            }//fin del tercer bucle for generla
-        
-            console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
+            }//FIN DEL TERCER BUCLE FOR GENERAL
+
+
+            //console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
 
         }); //fin del readFile que lee QueryAprobado.log
-
 }); //fin del readFile GENERAL que lee el archivo sqlkeyword.txt
 
 
