@@ -8,6 +8,7 @@ NOTA 2: Funciona como deberia funcionar el Lexer anterior. Es momento de program
 correspondiente a los tokens del arhivo sqlkeywords.txt
 NOTA 3: Lo mismo que imprime en consola, lo almacena en un archivo log, lo que me permitira
 trabajar con ese mismo archivo para lo de los tokens.
+NOTA 4: Hoy 2 de Noviembre a las 6:21AM por fin logré concluir el código y todos los tokens funcionan correctamente.
 */ 
 
 /*  Usamos el modulo fs de Node.js
@@ -37,7 +38,6 @@ fs.truncate('queryAprobado.log', 0, (err) => {
     var formarPalabra="";
     var caracteresDiferentes="._,-'';*+/=()<>!%$@&|^`~?:'[]";
     caracteresDiferentes=caracteresDiferentes+'"';
-    //variables necesarias bucle for 2
     const numerosPermitidos="1234567890";
     const abecedario="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" //minusculas y mayusculas porque no quiero complicarme la neta
     const dosPuntos=":";
@@ -56,6 +56,8 @@ fs.truncate('queryAprobado.log', 0, (err) => {
     var banderaPalabraEncontrada=false;
     var contadorCaracteresEspeciales=0;
     var contadorDosPuntos=0;
+    var contieneAbecedario=0;
+
 
     //PRIMER BUCLE FOR GENERAL
     for(let i=0;i<query.length;i++){
@@ -91,9 +93,6 @@ fs.truncate('queryAprobado.log', 0, (err) => {
             }
         }//fin primer condicional
     
-    
-        
-
         //segundo condicional
         if(letraActual==caracterVacio){//aqui entra cuando el caracter es vacio.
             if(formarPalabra==""){ 
@@ -112,7 +111,6 @@ fs.truncate('queryAprobado.log', 0, (err) => {
     }//fin primer bucle for general
  
 
-
 //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
         keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
@@ -126,6 +124,7 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
             palabraReservadaConstruida="";
             espacioActivo=0;
             posicionCaracterVacio=0;
+            contadorCaracteresEspeciales=0;
 
             for(let l=0;l<keywordActual.length;l++){ //evaluar cada letra de la palabra actual
                 
@@ -135,7 +134,6 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                     }
                 }
                 
-
                 if(keywordActual[l]==" "){
                     if(banderaEspacios==0){
                         banderaEspacios++; //se produjo el primer espacio
@@ -150,37 +148,60 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                    formarPalabraReservada=formarPalabraReservada+keywordActual[l];
                }
             }//fin bucle for de letras
-           
+            
+contieneAbecedario=0; 
+//Este bucle for recorre cada letra de formarPalabraReservada para ver si tiene caracteres del abecedario.
+            for(let z=0;z<formarPalabraReservada.length;z++){
+                if(abecedario.includes(formarPalabraReservada[z])){
+                    contieneAbecedario++;
+                }
+            }
+            
+            if(contieneAbecedario>=1){ //se corre esto si formarPalabraReservada contiene algo del abecedario
+                    for (let b=0;b<formarPalabraReservada.length;b++){
+                        if(caracteresDiferentes.includes(formarPalabraReservada[b])){
+                                if(formarPalabraReservada[b]==guionBajo){                                                                                      
+                                        palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b]; //para incluir los "_" en la palabra reservada.
+                                }
+                                //sino no realizar operacion alguna pues
+                        }else{
+                        palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                        }   
         
-            //---------------------------------------------------------------\\
-            //EVALUAR LA PALABRA CONSTRUIDA PARA RETIRAR CARACTERES ESPECIALES
-            contadorDosPuntos=0;
-            for (let b=0;b<formarPalabraReservada.length;b++){
+                    }
 
-                if(caracteresDiferentes.includes(formarPalabraReservada[b])){
-                        
-                        if(formarPalabraReservada[b]==dosPuntos){
-                            contadorDosPuntos++
-                        }
-                        if(contadorDosPuntos==2){
-                            palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
-                        }
 
-                        if(formarPalabraReservada[b]==guionBajo){                                                                                      
-                                palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b]; //para incluir los "_" en la palabra reservada.
-                        }
+            }else{ //SI NO TIENE LETRAS DEL ABECEDARIO SE CORRE ESTO
+                contadorDosPuntos=0;
+                for (let b=0;b<formarPalabraReservada.length;b++){
+                    if(caracteresDiferentes.includes(formarPalabraReservada[b])){
                         
-                        //sino no realizar operacion alguna pues entonces
-            }else{
-                palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                            if(contadorDosPuntos==1){
+                                contadorCaracteresEspeciales++;
+                            }
+
+                            if(formarPalabraReservada[b]==dosPuntos){
+                                contadorDosPuntos++
+                            }
+
+                            /*if(contadorDosPuntos==2){
+                                palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                            }*/
+
+                            if(contadorCaracteresEspeciales>=1){
+                                palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                            }
+                            
+                            //sino no realizar operacion alguna pues entonces
+                }else{
+                    palabraReservadaConstruida=palabraReservadaConstruida+formarPalabraReservada[b];
+                }
+
             }
 
-        }//fin for que evalua palabra construida para retirar caracteres especiales.
-
-            
+    }//fin condicion de No incluir 
+    
             palabraReservadaConstruidaSinEspacios=palabraReservadaConstruida.trim(); //chars vacios retirar de la palabra construida
-            
-
             //ASIGNACIÓN DE TOKENS. Cada palabra reservada tiene un numero asignado.
             todosMisTokens[formarNumero] = palabraReservadaConstruidaSinEspacios; //crear pares clave y valor
             
@@ -193,10 +214,8 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
 //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
 
         fs.readFile('queryAprobado.log','utf8', (err, data) => {
-            console.log("Comienza el lugar donde se lee el archivo queryAprobado.log");
+            console.log("COMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\n");
             
-          
-
             queryDataSpliteado=data.split("\n");
 
             //Tercer bucle for General que trabaja sobre cada elemento de queryAprobado.log
@@ -207,24 +226,25 @@ fs.readFile('sqlkeywords.txt','utf8', (err, data) => {
                 for(let n=0;n<formarNumero;n++){ //formarNumero vale 816 (el ultimo token de la lista)
                     if(banderaPalabraEncontrada==false){
                         if(queryDataActual==todosMisTokens[n]){
-                            console.log("La palabra reservada "+queryDataActual+" corresponde al token: "+n);
+                            console.log("La palabra reservada ("+queryDataActual+") corresponde al token: "+n);
                             banderaPalabraEncontrada=true;
                         }
                     }
                 } //fin sub ciclo for
         
                 if(banderaPalabraEncontrada==false){
-                    console.log("("+queryDataActual+") NO es una palabra reservada");
+                    console.log(""+queryDataActual+" NO es una palabra reservada");
                 }
                     
             }//fin del tercer bucle for generla
-           
-            
+        
+            console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
 
         }); //fin del readFile que lee QueryAprobado.log
 
-
 }); //fin del readFile GENERAL que lee el archivo sqlkeyword.txt
+
+
 
 
 
