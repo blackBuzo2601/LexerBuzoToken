@@ -4,11 +4,11 @@ correo
 ,
 sueldo
 from
+usuarios
 where
 nombre
-usuarios
-'
 =
+'
 juan
 ,
 pedro

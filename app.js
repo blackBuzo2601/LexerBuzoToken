@@ -119,6 +119,8 @@ fs.truncate('queryAprobado.log', 0, (err) => {
  //------------------------------------------------------------------------------------------------------------------------
 
 
+
+ 
 //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt
 fs.readFile('sqlkeywords.txt','utf8', (err, data) => { //se lee el archivo sqlkeywords.txt
         keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
@@ -248,12 +250,12 @@ contieneAbecedario=0; //Reinicio de esta variable.
             }//FIN DEL TERCER BUCLE FOR GENERAL
 
 
-            //console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
+           // console.log(todosMisTokens[14]); //para comprobar que los tokens sean almacenados correctamente.
+            
+
 
         }); //fin del readFile que lee QueryAprobado.log
 }); //fin del readFile GENERAL que lee el archivo sqlkeyword.txt
-
-
 
 
 
