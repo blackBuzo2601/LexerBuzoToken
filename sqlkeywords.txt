@@ -745,3 +745,22 @@
 814 : "YEAR_MONTH",
 815 : "ZEROFILL",
 816 : "ZONE",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+998 : "REGISTRO",
+999 : "COLUMNA",
+1000: "TABLA",

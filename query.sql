@@ -1,1 +1,1 @@
-SELECT * FROM TABLA;
+select * from tabla;

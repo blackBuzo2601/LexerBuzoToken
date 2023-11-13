@@ -258,9 +258,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
 //-----------------------CODIGO PARA EVALUAR SINTAXIS DE SELECT----------------------------------------------------
 
 console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================\n");
-       todosMisTokens[1000] = "TABLA";
-        todosMisTokens[999]  = "COLUMNA";
-        todosMisTokens[998] = "REGISTRO";
+       
         var tokensOrden =[]; //variable inicializada.
         
         for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
@@ -284,27 +282,27 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                 
         }//FIN DEL TERCER BUCLE FOR GENERAL
 
-
-        console.log(tokensOrden);  //verificar que esté almacenando en el array los tokens correctamente
+        console.log("PRUEBAS DEL SISTEMA");
+        console.log(tokensOrden);  //para verificar que esté almacenando en el array los tokens correctamente
         //tokensOrden=[655, 7, 309, 6 ]
-        
+        console.log("PRUEBAS DEL SISTEMA\n");
 
-        
+        //evalua que empiece con SELECT
+        if(tokensOrden[0]==655){ 
+            console.log("SELECT inicial validado");
 
-
-        if(tokensOrden[0]==655){ //evalua que empiece con SELECT
-
-            if(tokensOrden[1]==7){ //si es *
-                console.log("Se encontro un (*)asterisco");
+            if(tokensOrden[1]==7){ //evalua si la siguiente posición es un (*) asterisco
+                console.log("(*) asterisco validado en la posición 1.");
             }
-            else if(tokensOrden[1]==999){ //si es una columna pues
-                console.log("Se encontro una (,) coma");
+            //si no es un asterisco, evaluara si es una columna.
+            else if(tokensOrden[1]==999){ //evalua si la siguiente posición es una columna
+                console.log("(COLUMNA) validado en la posicion 1.");
             }
 
 
         //sino se cumple esa primera condicion. No sigue el flujo del programa.
         }else{
-            console.log("Fin del programa. No inicia con SELECT");
+            console.log("ERROR DE sintaxis. El Query no inicia con SELECT");
         }
 
 
