@@ -1,5 +1,10 @@
-selectt
+SELECT
 *
 from
-tabla
+TABLA
+WHERE
+columna
+<
+=
+registro
 ;

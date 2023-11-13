@@ -260,7 +260,15 @@ fs.readFile('query.sql','utf8', (err, data) => {
 console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================\n");
         
         var tokensOrden =[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
+        const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
+        var posicion=0; //posición que ira aumentando para evaluar cada elemento del query
+
+        for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
+            numerosDeCaracteresEspeciales.push(i);
+        }
+        //este arreglo nos servirá porque recordemos que los primeros 99 tokens son para caracteres especiales.
         
+
         for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
             banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
             queryDataActual=queryDataSpliteado[q]; //almacena cada elemento de QueryAprobado.log
@@ -279,7 +287,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                // console.log(""+queryDataActual+" NO es una palabra reservada");
                //no realizar por el momento
             }
-                
+
         }//FIN DE ESTE BUCLE FOR
 
         console.log("PRUEBAS DEL SISTEMA");
@@ -290,6 +298,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         
         //EVALUA que empiece con SELECT y que concluya con un  (;)
         if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ 
+            posicion++;
             
             if(tokensOrden[1]==7){ //EVALUAR SI LA POSICIÓN 1 ES UN (*) ASTERISCO 
                 console.log("(*) asterisco validado en la posición 1.");
@@ -297,12 +306,22 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                     console.log("(FROM) validado en la posición 2.")
                     if(tokensOrden[3]==1000){ //evalua si la siguiente posicion es TABLA
                         console.log("(TABLA) validado en la posición 3.");
+
                         if(tokensOrden[4]==6){//evalua si la siguiente posición es un (;)
                             console.log("(;) validado en la posición 4. FIN DEL PROGRAMA");
                         }
                         else if(tokensOrden[4]==800){ //evalua si la siguiente posición es un WHERE
                             console.log("WHERE validado en la posición 4.");
-                            
+                            if(tokensOrden[5]==999){ //evalua si la siguiente posición es una COLUMNA
+                                console.log("COLUMNA en la posición 5.");
+                                if(numerosDeCaracteresEspeciales.includes(tokensOrden[6])){
+                                    console.log("Caracter Diferente Encontrado: "+tokensOrden[6]);
+                                }else{
+                                    console.log("ERROR DE SINTAXIS");
+                                }
+                            }
+                        }else{
+                            console.log("ERROR DE SINTAXIS");
                         }
 
                     }else{
