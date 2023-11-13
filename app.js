@@ -16,6 +16,7 @@ NOTA 5: 12/11/2023 Momento de comenzar con los casos de SELECT con los tokens as
     con require ('fs) se esta importando el modulo 
     para acceder a todas las funciones y metodos de fs. */
     const fs = require ('fs'); 
+const { todo } = require('node:test');
     /*readFile es un método de fs.
     UTF-8 el parámetro que indica que se desea leer el archivo en formato UTF-8. 
     (err, data) son las variables que usamos como parámetro de nuestro callBack.
@@ -251,12 +252,56 @@ fs.readFile('query.sql','utf8', (err, data) => {
                 }//FIN DEL TERCER BUCLE FOR GENERAL
     
     
-              // console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
-                
-    
-    
+              //console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
+            
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------CODIGO PARA EVALUAR SINTAXIS DE SELECT----------------------------------------------------
+//655 SELECT
+//  7   *
+//309 FROM
+//1000 TABLA
+       todosMisTokens[1000] = "TABLA";
+        todosMisTokens[999]  = "COLUMNA";
+        todosMisTokens[998] = "REGISTRO";
+
+
+        var tokensNecesarios = [655,7,309,1000];
+
+        for(let p=0;p<tokensNecesarios.length;p++){
+           
+            console.log("Token "+tokensNecesarios[p]);
+            console.log(todosMisTokens[tokensNecesarios[p]]);
+
+        }
+
+/*
+            var tokens = [200, 10, 117, 998, 12];
+            var reglas = {
+                200: [200, 10],//SELECT
+                115: [115, 200,998], //FROM
+            }
+
+            function valida_select() {
+                console.log("Evaluar SELECT : " + SELECT_perfecto);
+                for (let i = 0; i < tokens.length; i++) {
+                    console.log(tokens[i]);
+                    if (tokens[i] != SELECT_perfecto[i]) {
+                        console.log("Chabal tenies un error, tio");
+                        return;
+                    }
+                }
+            }
+
+            if (tokens[0] == 200) { valida_select(); }
+            else { console.log("Error de inicio de token " + tokens[0]); return; }
+*/
+
+
+
+
             }); //fin del readFile que lee QueryAprobado.log
+
     }); //fin del readFile GENERAL que lee el archivo sqlkeyword.txt
 
 
-});
+}); //fin del readFile que lee query.sql
