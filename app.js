@@ -284,26 +284,25 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
 
         console.log("PRUEBAS DEL SISTEMA");
         console.log(tokensOrden);  //para verificar que esté almacenando en el array los tokens correctamente
-        //tokensOrden=[655, 7, 309, 6 ]
+        //tokensOrden=[655, 7, 309, 1000, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
 
         
-        //evalua que empiece con SELECT y que concluya con un  (;)
+        //EVALUA que empiece con SELECT y que concluya con un  (;)
         if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ 
-            console.log("EMPIEZA CON (SELECT) y termina con (;)");
-
-            if(tokensOrden[1]==7){ //evalua si la siguiente posición es un (*) asterisco
+            
+            if(tokensOrden[1]==7){ //EVALUAR SI LA POSICIÓN 1 ES UN (*) ASTERISCO 
                 console.log("(*) asterisco validado en la posición 1.");
                 if(tokensOrden[2]==309){ //evalua si la siguiente posicion es un FROM
                     console.log("(FROM) validado en la posición 2.")
                     if(tokensOrden[3]==1000){ //evalua si la siguiente posicion es TABLA
                         console.log("(TABLA) validado en la posición 3.");
-
                         if(tokensOrden[4]==6){//evalua si la siguiente posición es un (;)
-                            console.log("(;) validado en la posición 4.");
+                            console.log("(;) validado en la posición 4. FIN DEL PROGRAMA");
                         }
-                        else if(tokensOrden[4]==800){
-
+                        else if(tokensOrden[4]==800){ //evalua si la siguiente posición es un WHERE
+                            console.log("WHERE validado en la posición 4.");
+                            
                         }
 
                     }else{
@@ -314,7 +313,8 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                 }
             }
 
-            //si no es un asterisco, evaluara si es una columna.
+//---------------------------------------------------------------------------------------------------------------
+//si la posición 1 no es un (*) evaluara si es una COLUMNA 
             else if(tokensOrden[1]==999){ //evalua si la siguiente posición es una columna
                 console.log("(COLUMNA) validado en la posicion 1.");
                 
@@ -325,46 +325,11 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
 
             }//fin else if
 
-
-
-
-
-        //sino se cumple esa primera condicion. No sigue el flujo del programa.
+//ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
+//sino empieza con SELECT truena el programa. También si no contiene un (;) en el ultimo elemento.
         }else{
             console.log("ERROR DE sintaxis. El Query no inicia con (SELECT) o no termina con (;)");
         }
-
-
-
-/*
-        for(let p=0;p<tokensNecesarios.length;p++){
-            console.log("Token "+tokensNecesarios[p]);
-            console.log(todosMisTokens[tokensNecesarios[p]]);
-
-        }
-*/
-
-/*
-            var tokens = [200, 10, 117, 998, 12];
-            var reglas = {
-                200: [200, 10],//SELECT
-                115: [115, 200,998], //FROM
-            }
-
-            function valida_select() {
-                console.log("Evaluar SELECT : " + SELECT_perfecto);
-                for (let i = 0; i < tokens.length; i++) {
-                    console.log(tokens[i]);
-                    if (tokens[i] != SELECT_perfecto[i]) {
-                        console.log("Chabal tenies un error, tio");
-                        return;
-                    }
-                }
-            }
-
-            if (tokens[0] == 200) { valida_select(); }
-            else { console.log("Error de inicio de token " + tokens[0]); return; }
-*/
 
 
 
