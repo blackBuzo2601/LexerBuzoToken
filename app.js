@@ -225,7 +225,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
     //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
             fs.readFile('queryAprobado.log','utf8', (err, data) => { //leer el query almacenado en queryAprobado.log
                 console.log("\nCOMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\n");
-                var queryAprobadoData=data;
+                
                 queryDataSpliteado=data.toUpperCase();  //Convertir todo el archivo a Mayusculas para no tener problemas con los tokens.
                 queryDataSpliteado=queryDataSpliteado.split("\n"); //separar data en base saltos de lineas.
     
@@ -261,10 +261,33 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
        todosMisTokens[1000] = "TABLA";
         todosMisTokens[999]  = "COLUMNA";
         todosMisTokens[998] = "REGISTRO";
+  
+        
+        console.log("PRUEBA\n");
+        
 
+        for(let q=0; q<queryDataSpliteado.length-1;q++){ 
+            banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
+            queryDataActual=queryDataSpliteado[q]; //almacena cada elemento de QueryAprobado.log
+            
+            //Bucle for subgeneral que recorre el objeto todosMisTokens
+            for(let r=0;r<formarNumero;r++){ //formarNumero vale 816 (el ultimo token de la lista)
+                if(banderaPalabraEncontrada==false){
+                    if(queryDataActual==todosMisTokens[r]){
+                        console.log("La palabra reservada ("+queryDataActual+") corresponde al token: "+r);
+                        banderaPalabraEncontrada=true;
+                    }
+                }
+            } //fin sub ciclo for que recorre el objeto todosMisTokens
+    
+            if(banderaPalabraEncontrada==false){
+                console.log(""+queryDataActual+" NO es una palabra reservada");
+            }
                 
-        var querySQLSplit=queryAprobadoData.split("\n");
-        console.log(querySQLSplit);
+        }//FIN DEL TERCER BUCLE FOR GENERAL
+
+        console.log("Prueba");
+
         var tokensOrden = [655,999,309,1000];
 
 
