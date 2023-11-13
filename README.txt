@@ -7,3 +7,7 @@ Posterior a eso tecleamos lo siguiente:
     <--.load app.js 
 
 De esta manera se pueden visualizar los resultados.
+
+IMPORTANTE: Es posible que en algunas ocasiones tras correr el código, no se muestren en el orden correcto la separacion
+de los elementos de query.sql. Desconozco porque ocurre, pero basta con volver a correr el programa para visualizar
+que si lo hace correctamente la separacion y orden de los elementos de query.sql.
