@@ -1,7 +1,5 @@
 select
-columna
-,
-columna
+*
 from
 tabla
 ;

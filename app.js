@@ -288,13 +288,32 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         console.log("PRUEBAS DEL SISTEMA\n");
 
         
-        //evalua que empiece con SELECT
-        if(tokensOrden[0]==655){ 
-            console.log("SELECT inicial validado");
+        //evalua que empiece con SELECT y que concluya con un  (;)
+        if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ 
+            console.log("EMPIEZA CON (SELECT) y termina con (;)");
 
             if(tokensOrden[1]==7){ //evalua si la siguiente posición es un (*) asterisco
                 console.log("(*) asterisco validado en la posición 1.");
+                if(tokensOrden[2]==309){ //evalua si la siguiente posicion es un FROM
+                    console.log("(FROM) validado en la posición 2.")
+                    if(tokensOrden[3]==1000){ //evalua si la siguiente posicion es TABLA
+                        console.log("(TABLA) validado en la posición 3.");
+
+                        if(tokensOrden[4]==6){//evalua si la siguiente posición es un (;)
+                            console.log("(;) validado en la posición 4.");
+                        }
+                        else if(tokensOrden[4]==800){
+
+                        }
+
+                    }else{
+                        console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ (TABLA) después del (FROM).");
+                    }
+                }else{
+                    console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ UN FROM después del (*)");
+                }
             }
+
             //si no es un asterisco, evaluara si es una columna.
             else if(tokensOrden[1]==999){ //evalua si la siguiente posición es una columna
                 console.log("(COLUMNA) validado en la posicion 1.");
@@ -304,14 +323,15 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                 }
 
 
+            }//fin else if
 
 
-            }
+
 
 
         //sino se cumple esa primera condicion. No sigue el flujo del programa.
         }else{
-            console.log("ERROR DE sintaxis. El Query no inicia con SELECT");
+            console.log("ERROR DE sintaxis. El Query no inicia con (SELECT) o no termina con (;)");
         }
 
 
