@@ -1,6 +1,6 @@
 select
-edad
 correo
+edad
 ,
 sueldo
 from
