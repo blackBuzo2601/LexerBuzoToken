@@ -261,12 +261,9 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
        todosMisTokens[1000] = "TABLA";
         todosMisTokens[999]  = "COLUMNA";
         todosMisTokens[998] = "REGISTRO";
-  
+        var tokensOrden =[]; //variable inicializada.
         
-        console.log("PRUEBA\n");
-        
-
-        for(let q=0; q<queryDataSpliteado.length-1;q++){ 
+        for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
             banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
             queryDataActual=queryDataSpliteado[q]; //almacena cada elemento de QueryAprobado.log
             
@@ -274,21 +271,25 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
             for(let r=0;r<formarNumero;r++){ //formarNumero vale 816 (el ultimo token de la lista)
                 if(banderaPalabraEncontrada==false){
                     if(queryDataActual==todosMisTokens[r]){
-                        console.log("La palabra reservada ("+queryDataActual+") corresponde al token: "+r);
+                        tokensOrden.push(r);
                         banderaPalabraEncontrada=true;
                     }
                 }
             } //fin sub ciclo for que recorre el objeto todosMisTokens
     
             if(banderaPalabraEncontrada==false){
-                console.log(""+queryDataActual+" NO es una palabra reservada");
+               // console.log(""+queryDataActual+" NO es una palabra reservada");
+               //no realizar por el momento
             }
                 
         }//FIN DEL TERCER BUCLE FOR GENERAL
 
-        console.log("Prueba");
 
-        var tokensOrden = [655,999,309,1000];
+        console.log(tokensOrden);  //verificar que esté almacenando en el array los tokens correctamente
+        //tokensOrden=[655, 7, 309, 6 ]
+        
+
+        
 
 
         if(tokensOrden[0]==655){ //evalua que empiece con SELECT
