@@ -225,7 +225,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
     //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
             fs.readFile('queryAprobado.log','utf8', (err, data) => { //leer el query almacenado en queryAprobado.log
                 console.log("\nCOMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\n");
-                
+                var queryAprobadoData=data;
                 queryDataSpliteado=data.toUpperCase();  //Convertir todo el archivo a Mayusculas para no tener problemas con los tokens.
                 queryDataSpliteado=queryDataSpliteado.split("\n"); //separar data en base saltos de lineas.
     
@@ -256,23 +256,42 @@ fs.readFile('query.sql','utf8', (err, data) => {
             
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------CODIGO PARA EVALUAR SINTAXIS DE SELECT----------------------------------------------------
-//655 SELECT
-//  7   *
-//309 FROM
-//1000 TABLA
+
+console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================\n");
        todosMisTokens[1000] = "TABLA";
         todosMisTokens[999]  = "COLUMNA";
         todosMisTokens[998] = "REGISTRO";
 
+                
+        var querySQLSplit=queryAprobadoData.split("\n");
+        console.log(querySQLSplit);
+        var tokensOrden = [655,999,309,1000];
 
-        var tokensNecesarios = [655,7,309,1000];
 
+        if(tokensOrden[0]==655){ //evalua que empiece con SELECT
+
+            if(tokensOrden[1]==7){ //si es *
+                console.log("Se encontro un (*)asterisco");
+            }
+            else if(tokensOrden[1]==999){ //si es una columna pues
+                console.log("Se encontro una (,) coma");
+            }
+
+
+        //sino se cumple esa primera condicion. No sigue el flujo del programa.
+        }else{
+            console.log("Fin del programa. No inicia con SELECT");
+        }
+
+
+
+/*
         for(let p=0;p<tokensNecesarios.length;p++){
-           
             console.log("Token "+tokensNecesarios[p]);
             console.log(todosMisTokens[tokensNecesarios[p]]);
 
         }
+*/
 
 /*
             var tokens = [200, 10, 117, 998, 12];
