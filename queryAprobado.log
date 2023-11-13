@@ -1,6 +1,6 @@
 select
-correo
 edad
+correo
 ,
 sueldo
 from

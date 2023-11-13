@@ -9,6 +9,7 @@ correspondiente a los tokens del arhivo sqlkeywords.txt
 NOTA 3: Lo mismo que imprime en consola, lo almacena en un archivo log, lo que me permitira
 trabajar con ese mismo archivo para lo de los tokens.
 NOTA 4: Hoy 2 de Noviembre a las 6:21AM por fin logré concluir el código y todos los tokens funcionan correctamente.
+NOTA 5: 12/11/2023 Momento de comenzar con los casos de SELECT con los tokens asignados correctamente.
 */ 
 
 /*  Usamos el modulo fs de Node.js
@@ -27,16 +28,14 @@ fs.truncate('queryAprobado.log', 0, (err) => {
     if (err) {
         console.error('Error al borrar el contenido del archivo: ', err); //puede ocurrir si el archivo no exite.
     } else {
-        console.log('=====================================================\nContenido de queryAprobado.log borrado correctamente.\n=====================================================\n');
+        
     }
 });
-
 
 
 //QUERY QUE ESTA EN EL ARCHIVO SQL
 fs.readFile('query.sql','utf8', (err, data) => {
         var query=data; //almacenar la data del archivo query.sql en la variable QUERY
-        console.log("Prueba de imprimir el querySQL: "+query+"\nParece que si se imprimio correctamente");
     
         //TODAS LAS VARIABLES NECESARIAS
         var caracterVacio=" ";
@@ -64,7 +63,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
         var contadorDosPuntos=0;
         var contieneAbecedario=0;
     
-        console.log("IMPRESIÓN DE LOS ELEMENTOS DE QUERY SEPARADOS POR SALTOS DE LINEA:\n======================================================================\n");
+        console.log("\n\nIMPRESIÓN DE LOS ELEMENTOS DE QUERY SEPARADOS POR SALTOS DE LINEA:\n======================================================================");
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //PRIMER BUCLE FOR GENERAL
         //Este bucle lo que va a hacer es la construcción de todos los elementos  de "query" considerando los espacios,
@@ -123,10 +122,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
     
      //------------------------------------------------------------------------------------------------------------------------
     
-    
-    
-     
-    //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt
+    //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt y almacenarlos en un objeto {}
     fs.readFile('sqlkeywords.txt','utf8', (err, data) => { //se lee el archivo sqlkeywords.txt
             keywordsSplit=data.split("\n"); //separar los renglones en base saltos de Linea (No hemos tokenizado)
             
@@ -227,7 +223,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
     
     //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
             fs.readFile('queryAprobado.log','utf8', (err, data) => { //leer el query almacenado en queryAprobado.log
-                console.log("COMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\n");
+                console.log("\nCOMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\n");
                 
                 queryDataSpliteado=data.toUpperCase();  //Convertir todo el archivo a Mayusculas para no tener problemas con los tokens.
                 queryDataSpliteado=queryDataSpliteado.split("\n"); //separar data en base saltos de lineas.
@@ -255,7 +251,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
                 }//FIN DEL TERCER BUCLE FOR GENERAL
     
     
-               // console.log(todosMisTokens[14]); //para comprobar que los tokens sean almacenados correctamente.
+              // console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
                 
     
     
