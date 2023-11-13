@@ -258,15 +258,15 @@ fs.readFile('query.sql','utf8', (err, data) => {
 //-----------------------CODIGO PARA EVALUAR SINTAXIS DE SELECT----------------------------------------------------
 
 console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================\n");
-       
-        var tokensOrden =[]; //variable inicializada.
+        
+        var tokensOrden =[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
         
         for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
             banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
             queryDataActual=queryDataSpliteado[q]; //almacena cada elemento de QueryAprobado.log
             
             //Bucle for subgeneral que recorre el objeto todosMisTokens
-            for(let r=0;r<formarNumero;r++){ //formarNumero vale 816 (el ultimo token de la lista)
+            for(let r=0;r<formarNumero;r++){ //formarNumero vale 1000 (el ultimo token de la lista)
                 if(banderaPalabraEncontrada==false){
                     if(queryDataActual==todosMisTokens[r]){
                         tokensOrden.push(r);
@@ -280,13 +280,14 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                //no realizar por el momento
             }
                 
-        }//FIN DEL TERCER BUCLE FOR GENERAL
+        }//FIN DE ESTE BUCLE FOR
 
         console.log("PRUEBAS DEL SISTEMA");
         console.log(tokensOrden);  //para verificar que esté almacenando en el array los tokens correctamente
         //tokensOrden=[655, 7, 309, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
 
+        console.log("El valor del token 1000 es: "+todosMisTokens[1000]);
         //evalua que empiece con SELECT
         if(tokensOrden[0]==655){ 
             console.log("SELECT inicial validado");
@@ -297,6 +298,14 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
             //si no es un asterisco, evaluara si es una columna.
             else if(tokensOrden[1]==999){ //evalua si la siguiente posición es una columna
                 console.log("(COLUMNA) validado en la posicion 1.");
+                
+                if(tokensOrden[2]==3){ //evalua si la siguiente posicion es una (,) coma
+                    console.log("(,) coma validado en la posicion 2. ");
+                }
+
+
+
+
             }
 
 
