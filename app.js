@@ -236,7 +236,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
                     queryDataActual=queryDataSpliteado[m]; //almacena cada elemento de QueryAprobado.log
                     
                     //Bucle for subgeneral que recorre el objeto todosMisTokens
-                    for(let n=0;n<formarNumero;n++){ //formarNumero vale 816 (el ultimo token de la lista)
+                    for(let n=0;n<formarNumero+1;n++){ //formarNumero vale 997 (el ultimo token de la lista) +1 porque no estaba considerando el ultimo elemento de sqlkeywords.txt
                         if(banderaPalabraEncontrada==false){
                             if(queryDataActual==todosMisTokens[n]){
                                 console.log("La palabra reservada ("+queryDataActual+") corresponde al token: "+n);
@@ -266,7 +266,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
             queryDataActual=queryDataSpliteado[q]; //almacena cada elemento de QueryAprobado.log
             
             //Bucle for subgeneral que recorre el objeto todosMisTokens
-            for(let r=0;r<formarNumero;r++){ //formarNumero vale 1000 (el ultimo token de la lista)
+            for(let r=0;r<formarNumero+1;r++){ //formarNumero vale 1000 (el ultimo token de la lista) +1 para que considere también el ultimo elemento de sqlkeywords.txt
                 if(banderaPalabraEncontrada==false){
                     if(queryDataActual==todosMisTokens[r]){
                         tokensOrden.push(r);
@@ -287,7 +287,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         //tokensOrden=[655, 7, 309, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
 
-        console.log("El valor del token 1000 es: "+todosMisTokens[1000]);
+        
         //evalua que empiece con SELECT
         if(tokensOrden[0]==655){ 
             console.log("SELECT inicial validado");

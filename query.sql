@@ -1,1 +1,1 @@
-select * from tabla;
+select columna,columna from tabla;
