@@ -263,6 +263,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         var tokensOrden =[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
         var posicion=0; //posición que ira aumentando para evaluar cada elemento del query
+        var contadorComparadores=0;
 
         for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
             numerosDeCaracteresEspeciales.push(i);
@@ -295,6 +296,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         }//FIN DE ESTE BUCLE FOR
 
         console.log("PRUEBAS DEL SISTEMA");
+        
         console.log(tokensOrden); //para verificar que esté almacenando en el array los tokens correctamente
         //tokensOrden=[655, 7, 309, 1000, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
@@ -332,8 +334,24 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                                 if(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
                                     while(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
                                         console.log("Caracter Diferente Encontrado en la posicion:"+posicion+" y es: "+todosMisTokens[tokensOrden[posicion]]);
-                                        posicion++; //7
+                                        posicion++; //7 despues 8
+                                        contadorComparadores++;
                                     }
+                                    if(contadorComparadores==1){
+                                        console.log("Va por buen camino el codigo :)");
+                                        console.log("La posicion es: "+posicion);
+                                    }
+                                    else if(contadorComparadores==2){
+                                        console.log("Va por buen camino tambien este codigo :)");
+                                        console.log("La posicion es: "+posicion);
+
+                                    }else{
+                                        console.log("ERROR DE SINTAXIS. Mas de 3 comparadores");
+                                    }
+                                    
+
+                                }else{
+                                    console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN LA POSICIÓN: "+posicion);
                                 }
 
                                 //console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN POSICION: "+posicion);

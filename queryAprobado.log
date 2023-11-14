@@ -1,7 +1,7 @@
 select
 *
-from
 tabla
+from
 where
 columna
 <
