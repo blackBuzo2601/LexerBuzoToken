@@ -353,13 +353,15 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                                     }
                                     else if(contadorComparadores==1){
                                         console.log("Es correcto. Solo es un comparador");
+                                        tronarCodigo=false;
                                     }
                                     else if(contadorComparadores!=1 && contadorComparadores!=2){
                                         console.log("ERROR. Hay mas de 2 comparadores.");
                                         tronarCodigo=true;
                                     }
 
-                                    if(tronarCodigo==false){ //continuar con el flujo del programa
+                                    
+                                    if(tronarCodigo==false){ //continuar con el flujo del programa. Si es true pues no va a continuar aqui.
                                         console.log("El codigo que sigue. Va bien el programa.")
                                     }
                                     

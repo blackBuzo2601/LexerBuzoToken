@@ -4,7 +4,7 @@ from
 tabla
 where
 columna
-=
-=
+<
+<
 registro
 ;
