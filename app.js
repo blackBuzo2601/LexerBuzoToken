@@ -387,14 +387,12 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                                 }else{
                                     console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN LA POSICIÓN: "+posicion);
                                 }
-
-                                //console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN POSICION: "+posicion);
                         
                             }else{
                                 console.log("ERROR DE SINTAXIS. COLUMNA no encontrada en la posicion: "+posicion); 
                             }
                         }else{//si no es un (;) ni un WHERE. Es error de sintaxis.
-                            console.log("ERROR DE SINTAXIS. NI ; ni un WHERE. ");
+                            console.log("ERROR DE SINTAXIS. NI ; ni un WHERE en la posicion: "+posicion);
                         }
 
                     }else{
