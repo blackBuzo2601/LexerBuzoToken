@@ -295,7 +295,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         }//FIN DE ESTE BUCLE FOR
 
         console.log("PRUEBAS DEL SISTEMA");
-        console.log("array de los tokens ordenados: "+tokensOrden);  //para verificar que esté almacenando en el array los tokens correctamente
+        console.log(tokensOrden); //para verificar que esté almacenando en el array los tokens correctamente
         //tokensOrden=[655, 7, 309, 1000, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
 
@@ -321,19 +321,25 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                             console.log("(;) validado en la posición: "+posicion+". FIN DEL PROGRAMA");
                         }
                         else if(tokensOrden[posicion]==800){ //evalua si la siguiente posición es un WHERE
-                            console.log("WHERE validado en la posición: "+posicion);
+                            console.log("WHERE validado en la posición: "+posicion); //-------------HASTA AQUI TODO BIEN
                             posicion++; //5
 
                             if(tokensOrden[posicion]==999){ //evalua si la siguiente posición es una COLUMNA
                                 console.log("COLUMNA validado en la posición: "+posicion);
                                 posicion++; //6
 
+                                //La siguiente posición debe de haber un operador de comparación
                                 if(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
-                                    console.log("Caracter Diferente Encontrado: "+tokensOrden[posicion]);
-                                    posicion++; //7    
-                                }else{
-                                    console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN POSICION: "+posicion);
+                                    while(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
+                                        console.log("Caracter Diferente Encontrado en la posicion:"+posicion+" y es: "+todosMisTokens[tokensOrden[posicion]]);
+                                        posicion++; //7
+                                    }
                                 }
+
+                                //console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN POSICION: "+posicion);
+                        
+                            }else{
+                                console.log("ERROR DE SINTAXIS. COLUMNA no encontrada en la posicion: "+posicion); 
                             }
                         }else{//si no es un (;) ni un WHERE. Es error de sintaxis.
                             console.log("ERROR DE SINTAXIS. NI ; ni un WHERE. ");
