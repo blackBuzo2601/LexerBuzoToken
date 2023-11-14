@@ -1,10 +1,10 @@
 select
 *
-tabla
 from
+tabla
 where
 columna
-<
+=
 =
 registro
 ;

@@ -15,7 +15,8 @@ NOTA 5: 12/11/2023 Momento de comenzar con los casos de SELECT con los tokens as
 /*  Usamos el modulo fs de Node.js
     con require ('fs) se esta importando el modulo 
     para acceder a todas las funciones y metodos de fs. */
-    const fs = require ('fs'); 
+    const { triggerAsyncId } = require('async_hooks');
+const fs = require ('fs'); 
 const { todo } = require('node:test');
     /*readFile es un método de fs.
     UTF-8 el parámetro que indica que se desea leer el archivo en formato UTF-8. 
@@ -264,6 +265,8 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
         var posicion=0; //posición que ira aumentando para evaluar cada elemento del query
         var contadorComparadores=0;
+        var almacenarCaracterDiferente=[];
+        var tronarCodigo=false;
 
         for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
             numerosDeCaracteresEspeciales.push(i);
@@ -334,22 +337,35 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                                 if(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
                                     while(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
                                         console.log("Caracter Diferente Encontrado en la posicion:"+posicion+" y es: "+todosMisTokens[tokensOrden[posicion]]);
+                                        almacenarCaracterDiferente.push(todosMisTokens[tokensOrden[posicion]]);
                                         posicion++; //7 despues 8
                                         contadorComparadores++;
                                     }
-                                    if(contadorComparadores==1){
-                                        console.log("Va por buen camino el codigo :)");
-                                        console.log("La posicion es: "+posicion);
-                                    }
-                                    else if(contadorComparadores==2){
-                                        console.log("Va por buen camino tambien este codigo :)");
-                                        console.log("La posicion es: "+posicion);
 
-                                    }else{
-                                        console.log("ERROR DE SINTAXIS. Mas de 3 comparadores");
+                                    if(contadorComparadores==2){ //Aqui entra si son dos comparadores.
+                                        if(almacenarCaracterDiferente[0]!=almacenarCaracterDiferente[1]){//Evaluar que ambos comparadores sean diferentes
+                                            console.log("Es correcto. Los comparadores son diferentes.");
+                                            tronarCodigo=false;
+                                        }else{
+                                            console.log("ERROR DE SINTAXIS. Los comparadores son duplicados.");
+                                            tronarCodigo=true;
+                                        }
+                                    }
+                                    else if(contadorComparadores==1){
+                                        console.log("Es correcto. Solo es un comparador");
+                                    }
+                                    else if(contadorComparadores!=1 && contadorComparadores!=2){
+                                        console.log("ERROR. Hay mas de 2 comparadores.");
+                                        tronarCodigo=true;
+                                    }
+
+                                    if(tronarCodigo==false){ //continuar con el flujo del programa
+                                        console.log("El codigo que sigue. Va bien el programa.")
                                     }
                                     
-
+                                    
+                                    
+                                    
                                 }else{
                                     console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN LA POSICIÓN: "+posicion);
                                 }
