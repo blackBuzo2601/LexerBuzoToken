@@ -1,8 +1,8 @@
-SELECT
+select
 *
 from
-TABLA
-WHERE
+tabla
+where
 columna
 <
 =

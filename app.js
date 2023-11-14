@@ -259,6 +259,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
 
 console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================\n");
         
+        //OTRAS VARIABLES NECESARIAS
         var tokensOrden =[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
         var posicion=0; //posición que ira aumentando para evaluar cada elemento del query
@@ -268,6 +269,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         }
         //este arreglo nos servirá porque recordemos que los primeros 99 tokens son para caracteres especiales.
         
+
 
         for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
             banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
@@ -287,31 +289,38 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                // console.log(""+queryDataActual+" NO es una palabra reservada");
                //no realizar por el momento
             }
-
         }//FIN DE ESTE BUCLE FOR
 
         console.log("PRUEBAS DEL SISTEMA");
-        console.log(tokensOrden);  //para verificar que esté almacenando en el array los tokens correctamente
+        console.log("array de los tokens ordenados: "+tokensOrden);  //para verificar que esté almacenando en el array los tokens correctamente
         //tokensOrden=[655, 7, 309, 1000, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
 
         
         //EVALUA que empiece con SELECT y que concluya con un  (;)
         if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ 
-            posicion++;
-            
-            if(tokensOrden[1]==7){ //EVALUAR SI LA POSICIÓN 1 ES UN (*) ASTERISCO 
-                console.log("(*) asterisco validado en la posición 1.");
-                if(tokensOrden[2]==309){ //evalua si la siguiente posicion es un FROM
-                    console.log("(FROM) validado en la posición 2.")
-                    if(tokensOrden[3]==1000){ //evalua si la siguiente posicion es TABLA
-                        console.log("(TABLA) validado en la posición 3.");
+            posicion++; //1
 
-                        if(tokensOrden[4]==6){//evalua si la siguiente posición es un (;)
-                            console.log("(;) validado en la posición 4. FIN DEL PROGRAMA");
+//--------------------------------PRIMER OPCION SI ES UN ASTERISCO EN LA POSICION 1-------------------------------------
+            if(tokensOrden[posicion]==7){ //EVALUAR SI LA POSICIÓN 1 ES UN (*) ASTERISCO 
+                console.log("(*) asterisco validado en la posición: "+posicion);
+                posicion++; //2
+
+                if(tokensOrden[posicion]==309){ //evalua si la siguiente posicion es un FROM
+                    console.log("(FROM) validado en la posición: "+posicion);
+                    posicion++; //3
+
+                    if(tokensOrden[posicion]==1000){ //evalua si la siguiente posicion es TABLA
+                        console.log("(TABLA) validado en la posición: "+posicion);
+                        posicion++;//4
+
+                        if(tokensOrden[posicion]==6){//evalua si la siguiente posición es un (;)
+                            console.log("(;) validado en la posición: "+posicion+". FIN DEL PROGRAMA");
                         }
-                        else if(tokensOrden[4]==800){ //evalua si la siguiente posición es un WHERE
-                            console.log("WHERE validado en la posición 4.");
+                        else if(tokensOrden[posicion]==800){ //evalua si la siguiente posición es un WHERE
+                            console.log("WHERE validado en la posición: "+posicion);
+                            posicion++; //5
+
                             if(tokensOrden[5]==999){ //evalua si la siguiente posición es una COLUMNA
                                 console.log("COLUMNA en la posición 5.");
                                 if(numerosDeCaracteresEspeciales.includes(tokensOrden[6])){
@@ -325,24 +334,22 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                         }
 
                     }else{
-                        console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ (TABLA) después del (FROM).");
+                        console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ (TABLA) en la posicion: "+posicion);
                     }
                 }else{
-                    console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ UN FROM después del (*)");
+                    console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ UN FROM en la posicion: "+posicion);
                 }
             }
-
-//---------------------------------------------------------------------------------------------------------------
+//-----------------SEGUNDA OPCION SI LA POSICION 1 ES UNA COLUMNA-----------------------------------------
 //si la posición 1 no es un (*) evaluara si es una COLUMNA 
-            else if(tokensOrden[1]==999){ //evalua si la siguiente posición es una columna
-                console.log("(COLUMNA) validado en la posicion 1.");
-                
-                if(tokensOrden[2]==3){ //evalua si la siguiente posicion es una (,) coma
-                    console.log("(,) coma validado en la posicion 2. ");
+            else if(tokensOrden[posicion]==999){ //evalua si la siguiente posición es una columna
+                console.log("(COLUMNA) validado en la posicion: "+posicion);
+                posicion++;
+                if(tokensOrden[posicion]==3){ //evalua si la siguiente posicion es una (,) coma
+                    console.log("(,) coma validado en la posicion: "+posicion);
                 }
-
-
             }//fin else if
+
 
 //ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
 //sino empieza con SELECT truena el programa. También si no contiene un (;) en el ultimo elemento.
