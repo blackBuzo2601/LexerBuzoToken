@@ -360,9 +360,25 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                                         tronarCodigo=true;
                                     }
 
-                                    
+
                                     if(tronarCodigo==false){ //continuar con el flujo del programa. Si es true pues no va a continuar aqui.
-                                        console.log("El codigo que sigue. Va bien el programa.")
+                                        console.log("El codigo que sigue. Va bien el programa.");
+                                        if(tokensOrden[posicion]==998){ //evalua si la siguiente posicion es un REGISTRO
+                                            console.log("(REGISTRO) validado en la posición: "+posicion);
+                                            posicion++; //9
+
+                                            if(tokensOrden[posicion]==6){ //evalua si la siguiente posición es un (;)
+                                                console.log("(;) validado en la posición: "+posicion);
+                                                
+                                            }else{
+                                                console.log("ERROR DE SINTAXIS. Se esperaba un ; en la posición: "+posicion);
+                                            }
+
+
+                                        }else{
+                                            console.log("ERROR DE SINTAXIS. Se esperaba un REGISTRO en la posicion: "+posicion);
+                                        }
+
                                     }
                                     
                                     
