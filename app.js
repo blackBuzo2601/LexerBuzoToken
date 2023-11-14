@@ -288,6 +288,9 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
             if(banderaPalabraEncontrada==false){
                // console.log(""+queryDataActual+" NO es una palabra reservada");
                //no realizar por el momento
+                //LO QUE DEBO REALIZAR ES QUE LO QUE NO SE ENCUENTRE EN sqlkeywords.txt o que no sea palabra reservada
+                //tambien lo guarde en tokensOrden con push(r) tal cual.
+
             }
         }//FIN DE ESTE BUCLE FOR
 
@@ -298,7 +301,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
 
         
         //EVALUA que empiece con SELECT y que concluya con un  (;)
-        if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ 
+        if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ //si entra en esta condición significa que si empieza con select y concluye con ;
             posicion++; //1
 
 //--------------------------------PRIMER OPCION SI ES UN ASTERISCO EN LA POSICION 1-------------------------------------
@@ -321,16 +324,19 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                             console.log("WHERE validado en la posición: "+posicion);
                             posicion++; //5
 
-                            if(tokensOrden[5]==999){ //evalua si la siguiente posición es una COLUMNA
-                                console.log("COLUMNA en la posición 5.");
-                                if(numerosDeCaracteresEspeciales.includes(tokensOrden[6])){
-                                    console.log("Caracter Diferente Encontrado: "+tokensOrden[6]);
+                            if(tokensOrden[posicion]==999){ //evalua si la siguiente posición es una COLUMNA
+                                console.log("COLUMNA validado en la posición: "+posicion);
+                                posicion++; //6
+
+                                if(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
+                                    console.log("Caracter Diferente Encontrado: "+tokensOrden[posicion]);
+                                    posicion++; //7    
                                 }else{
-                                    console.log("ERROR DE SINTAXIS");
+                                    console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN POSICION: "+posicion);
                                 }
                             }
-                        }else{
-                            console.log("ERROR DE SINTAXIS");
+                        }else{//si no es un (;) ni un WHERE. Es error de sintaxis.
+                            console.log("ERROR DE SINTAXIS. NI ; ni un WHERE. ");
                         }
 
                     }else{
