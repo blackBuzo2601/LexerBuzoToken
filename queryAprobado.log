@@ -2,5 +2,5 @@ select
 *
 from
 tabla
-where
 ;
+where
