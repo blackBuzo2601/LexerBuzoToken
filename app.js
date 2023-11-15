@@ -299,7 +299,6 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         }//FIN DE ESTE BUCLE FOR
 
         console.log("PRUEBAS DEL SISTEMA");
-        
         console.log(tokensOrden); //para verificar que esté almacenando en el array los tokens correctamente
         //tokensOrden=[655, 7, 309, 1000, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
@@ -495,7 +494,10 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                     else if(tokensOrden[posicion]==3){ //si no es un FROM puede ser un (,)
                         console.log("(,) validado en la posicion: "+posicion);
                         posicion++;
-                    }else{
+
+
+
+                    }else{ //Si no es un FROM es error de sintaxis.
                         console.log("ERROR DE SINTAXIS. Se esperaba FROM o (,) en la posicion: "+posicion);
                     }
 

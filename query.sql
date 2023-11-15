@@ -1,1 +1,1 @@
-select columna from tabla columna;
+select columna,columna,columna from tabla where columna = registro;
