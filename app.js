@@ -293,18 +293,20 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
     console.log("PRUEBAS DEL SISTEMA\n");
     
 
-    //Después del SELECT puede ser (*) o COLUMNA. Solo esas dos opciones.
+   
           const tokensReglas1=[655, 7, 309, 1000, 6 ]; //SELECT * FROM TABLA;
                               //0   1   2    3    4
+          const tokenReglas1SubArray1=[800, 999] //WHERE, COLUMNA
+
       //    const tokensReglas2=[655,7,309, 1000, 800, 999, comparador, 998, 6]; //SELECT * FROM TABLA WHERE COLUMNA < REGISTRO;
-                              //0, 1, 2,  3,    4,   5,   6,          7,   8
+                              // 0,  1, 2,  3,    4,   5,   6,          7,   8
     
 
 if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
 
     if(tokensEncontrados[1]==7){ //VALIDAR SELECT *
 
-        sonIguales=true;  //inicializar variables en true
+        sonIguales=true;  //inicializar variables
         mismoTamaño=false; 
         
           //comparar si ambos arrays tienen el mismo longitud
@@ -313,7 +315,7 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
             }else{
                 mismoTamaño=false;
             }
-
+            
             if(mismoTamaño==true){
                 //este for iterara por cada uno de los elementos de tokensReglas1
                 for (let t=0;t<tokensReglas1.length;t++){ //evaluar que ambos arrays sean iguales
@@ -323,14 +325,25 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
                     }
                 }//fin for
             }
-                       
+
             if(mismoTamaño==true  && sonIguales==true){
                 console.log("Es valido el Query");
-            }else{
-                console.log("No es valido el query");
             }
+            
+            //No se cumplio la condición anterior, entonces evaluara que exista un WHERE
+            else if(tokensEncontrados[4]==800){ //evaluar que la posicion 4 sea WHERE
+                sonIguales=true;  //inicializar variables
+                mismoTamaño=false; 
 
-            //else if() codigo del SELECT * FROM TABLA WHERE No sse que
+
+
+            }else{
+                console.log("Error de sintaxis. Ni un (;) ni un WHERE en la posicion 4.");
+            }
+               
+            
+
+            
 
     }//fin caso SELECT *
 

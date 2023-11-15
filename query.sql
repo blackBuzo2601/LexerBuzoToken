@@ -1,1 +1,1 @@
-select * from tabla; where 
+select * from tabla where 
