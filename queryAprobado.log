@@ -1,10 +1,5 @@
 select
-*
-from
-tabla
-where
 columna
-<
-=
-registro
+,
+tabla
 ;

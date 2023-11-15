@@ -304,9 +304,9 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         //tokensOrden=[655, 7, 309, 1000, 6 ]
         console.log("PRUEBAS DEL SISTEMA\n");
 
-        
         //EVALUA que empiece con SELECT y que concluya con un  (;)
         if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ //si entra en esta condición significa que si empieza con select y concluye con ;
+            console.log("SELECT al inicio y (;) al final VALIDADO");
             posicion++; //1
 
 //--------------------------------PRIMER OPCION SI ES UN ASTERISCO EN LA POSICION 1-------------------------------------
@@ -406,13 +406,27 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
 //si la posición 1 no es un (*) evaluara si es una COLUMNA 
             else if(tokensOrden[posicion]==999){ //evalua si la siguiente posición es una columna
                 console.log("(COLUMNA) validado en la posicion: "+posicion);
-                posicion++;
-                if(tokensOrden[posicion]==3){ //evalua si la siguiente posicion es una (,) coma
-                    console.log("(,) coma validado en la posicion: "+posicion);
-                }
-            }//fin else if
+                posicion++; //2
+
+                    if(tokensOrden[posicion]==309){ //evalua si la siguiente posicion es un FROM
+                    console.log("(FROM) validado en la posición: "+posicion);
+                    posicion++; //3
+                    }
+
+                    else if(tokensOrden[posicion]==3){ //evalua si la siguiente posicion es (,)
+                        console.log("(,) validado en la posicion: "+posicion);
+                        posicion++;
+                    }else{
+                        console.log("ERROR DE SINTAXIS. Se esperaba FROM o (,) en la posicion: "+posicion);
+                    }
+
+                
 
 
+//--------------------------------------------------------------------------------------------------------------
+            }else{   //ENTRA EL FLUJO DE ESTE BLOQUE SI NO HAY NI UN ASTERISCO NI COLUMNA EN LA POSICION 1
+                console.log("ERROR DE SINTAXIS. Ni (*) NI COLUMNA en la posicion: "+posicion);
+            }
 //ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
 //sino empieza con SELECT truena el programa. También si no contiene un (;) en el ultimo elemento.
         }else{
