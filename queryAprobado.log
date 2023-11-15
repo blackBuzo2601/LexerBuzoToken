@@ -1,5 +1,6 @@
 select
 *
 from
-;
 tabla
+where
+;

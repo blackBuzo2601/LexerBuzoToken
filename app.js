@@ -258,6 +258,8 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
     //VARIABLES NECESARIAS PARA ESTE MODULO DEL CODIGO:
         var tokensEncontrados=[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
+        var sonIguales=true;
+
         for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
             numerosDeCaracteresEspeciales.push(i);
         } //este arreglo nos servirá porque recordemos que los primeros 99 tokens son para caracteres especiales.
@@ -292,26 +294,43 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
 
     //Después del SELECT puede ser (*) o COLUMNA. Solo esas dos opciones.
           const tokensReglas1=[655, 7, 309, 1000, 6 ]; //SELECT * FROM TABLA;
-                            //0   1   2    3    4
-     //   const tokensReglas2=[655,7,309, 1000, 800, 999, comparador, 998, 6]; //SELECT * FROM TABLA WHERE COLUMNA < REGISTRO;
+                              //0   1   2    3    4
+        //  const tokensReglas2=[655,7,309, 1000, 800, 999, comparador, 998, 6]; //SELECT * FROM TABLA WHERE COLUMNA < REGISTRO;
                               //0, 1, 2,  3,    4,   5,   6,          7,   8
 
 
 if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
 
-    
-    if(tokensReglas1==tokensEncontrados){
-        console.log("Es válido el Query");
-    }else{
-        console.log("NO SON EL MISMO ARRAY.\nTokens Encontrados: "+tokensEncontrados+"\nTokens Reglas 1: "+tokensReglas1);
+    if(tokensEncontrados[1]==7){ //VALIDAR SELECT *
+
+        sonIguales=true; //inicializar variable en true
+          //este for iterara por cada uno de los elementos de tokensReglas1
+            for (let t=0;t<tokensReglas1.length;t++){ 
+                if(tokensReglas1[t] !== tokensEncontrados[t]){
+                    sonIguales = false;
+                    break; //salir del for una vez que se cumpla esta condicion
+                }
+            }//fin for
+
+            if(sonIguales==true){
+            console.log("Es valido el Query");
+            }else{
+                console.log("No es valido el query");
+            }
+            
+            //else if() codigo del SELECT * FROM TABLA WHERE No sse que
+
+    }//fin caso SELECT *
+
+    else if(tokensEncontrados[1]==999){ //no es (,) entonces validar SELECT COLUMNA
+        
+    }//fin caso SELECT COLUMNA
+
+    else{ //ni (,) ni COLUMNA. Entonces es ERROR de SINTAXIS
+        console.log("ERROR DE SINTAXIS. Después de SELECT no hay (*) ni (COLUMNA)");
     }
-    
-
-
-
-
-
-}else{ //No es select concluye el programa.
+//--------------------------------------NO EMPIEZA CON SELECT------------------------------------------------------
+}else{ //No es SELECT entonces concluye el programa.
     console.log("Error de sintaxis. No se encontro SELECT al inicio del query.");
 }
 
