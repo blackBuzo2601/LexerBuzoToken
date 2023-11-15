@@ -368,7 +368,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                                             posicion++; //9
 
                                             if(tokensOrden[posicion]==6){ //evalua si la siguiente posición es un (;)
-                                                console.log("(;) validado en la posición: "+posicion);
+                                                console.log("(;) validado en la posición: "+posicion+". Fin del programa");
                                                 
                                             }else{
                                                 console.log("ERROR DE SINTAXIS. Se esperaba un ; en la posición: "+posicion);
@@ -411,9 +411,18 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                     if(tokensOrden[posicion]==309){ //evalua si la siguiente posicion es un FROM
                     console.log("(FROM) validado en la posición: "+posicion);
                     posicion++; //3
-                    }
+                            if(tokensOrden[posicion]==1000){ //despues de FROM debe ser TABLA
+                                console.log("(TABLA) validado en la posicion: "+posicion);
+                                posicion++; //4
+                                    if(tokensOrden[posicion]==6){ //despues de TABLA debe ser (;) o un where
+                                        console.log("(;) VALIDADO en la posicion: "+posicion);
+                                    }
 
-                    else if(tokensOrden[posicion]==3){ //evalua si la siguiente posicion es (,)
+                            }else{
+                                console.log("ERROR DE SINTAXIS. Se esperaba (TABLA) en la posicion: "+posicion);
+                            }
+                    }
+                    else if(tokensOrden[posicion]==3){ //si no es un FROM puede ser un (,)
                         console.log("(,) validado en la posicion: "+posicion);
                         posicion++;
                     }else{
