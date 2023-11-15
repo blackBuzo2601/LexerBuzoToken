@@ -251,274 +251,74 @@ fs.readFile('query.sql','utf8', (err, data) => {
                     }
                         
                 }//FIN DEL TERCER BUCLE FOR GENERAL
-    
-    
-              //console.log(todosMisTokens); //para comprobar que los tokens sean almacenados correctamente.
-            
+        
 //-----------------------------------------------------------------------------------------------------------------
 //-----------------------CODIGO PARA EVALUAR SINTAXIS DE SELECT----------------------------------------------------
-
 console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================\n");
-        
-        //OTRAS VARIABLES NECESARIAS
-        var tokensOrden =[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
+    //VARIABLES NECESARIAS PARA ESTE MODULO DEL CODIGO:
+        var tokensEncontrados=[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
-        var posicion=0; //posición que ira aumentando para evaluar cada elemento del query
-        var contadorComparadores=0;
-        var almacenarCaracterDiferente=[];
-        var tronarCodigo=false;
-
         for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
             numerosDeCaracteresEspeciales.push(i);
-        }
-        //este arreglo nos servirá porque recordemos que los primeros 99 tokens son para caracteres especiales.
+        } //este arreglo nos servirá porque recordemos que los primeros 99 tokens son para caracteres especiales.
         
-
-
+//ESTE BUCLE FOR NO TIENE EXPLICACIÓN. ES UNO QUE COPIÉ Y PEGUÉ DE OTRA SECCION DEL CODIGO.
+//AQUI LO QUE VA A HACER ES QUE LOS TOKENS ENCONTRADOS LOS VA A PUSHEAR EN UN ARRAY (tokensEncontrados)
         for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
             banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
             queryDataActual=queryDataSpliteado[q]; //almacena cada elemento de QueryAprobado.log
-            
             //Bucle for subgeneral que recorre el objeto todosMisTokens
             for(let r=0;r<formarNumero+1;r++){ //formarNumero vale 1000 (el ultimo token de la lista) +1 para que considere también el ultimo elemento de sqlkeywords.txt
                 if(banderaPalabraEncontrada==false){
                     if(queryDataActual==todosMisTokens[r]){
-                        tokensOrden.push(r);
+                        tokensEncontrados.push(r);
                         banderaPalabraEncontrada=true;
                     }
                 }
             } //fin sub ciclo for que recorre el objeto todosMisTokens
-    
             if(banderaPalabraEncontrada==false){
                // console.log(""+queryDataActual+" NO es una palabra reservada");
                //no realizar por el momento
                 //LO QUE DEBO REALIZAR ES QUE LO QUE NO SE ENCUENTRE EN sqlkeywords.txt o que no sea palabra reservada
-                //tambien lo guarde en tokensOrden con push(r) tal cual.
-
+                //tambien lo guarde en tokensEncontrados con push(r) tal cual.
             }
         }//FIN DE ESTE BUCLE FOR
 
-        console.log("PRUEBAS DEL SISTEMA");
-        console.log(tokensOrden); //para verificar que esté almacenando en el array los tokens correctamente
-        //tokensOrden=[655, 7, 309, 1000, 6 ]
-        console.log("PRUEBAS DEL SISTEMA\n");
+    console.log("PRUEBAS DEL SISTEMA");
+    console.log(tokensEncontrados); //para verificar que esté almacenando en el array los tokens correctamente
+    //tokensEncontrados=[655, 7, 309, 1000, 6 ]
+    console.log("PRUEBAS DEL SISTEMA\n");
+    
 
-        //EVALUA que empiece con SELECT y que concluya con un  (;)
-        if(tokensOrden[0]==655 && tokensOrden[tokensOrden.length-1]==6){ //si entra en esta condición significa que si empieza con select y concluye con ;
-            console.log("SELECT al inicio y (;) al final VALIDADO");
-            posicion++; //1
-
-//--------------------------------PRIMER OPCION SI ES UN ASTERISCO EN LA POSICION 1-------------------------------------
-            if(tokensOrden[posicion]==7){ //EVALUAR SI LA POSICIÓN 1 ES UN (*) ASTERISCO 
-                console.log("(*) asterisco validado en la posición: "+posicion);
-                posicion++; //2
-
-                if(tokensOrden[posicion]==309){ //evalua si la siguiente posicion es un FROM
-                    console.log("(FROM) validado en la posición: "+posicion);
-                    posicion++; //3
-
-                    if(tokensOrden[posicion]==1000){ //evalua si la siguiente posicion es TABLA
-                        console.log("(TABLA) validado en la posición: "+posicion);
-                        posicion++;//4
-
-                        if(tokensOrden[posicion]==6){//evalua si la siguiente posición es un (;)
-                            console.log("(;) validado en la posición: "+posicion+". FIN DEL PROGRAMA");
-                        }
-                        //copiar
-                        else if(tokensOrden[posicion]==800){ //evalua si la siguiente posición es un WHERE
-                            console.log("WHERE validado en la posición: "+posicion); //-------------HASTA AQUI TODO BIEN
-                            posicion++; //5
-
-                            if(tokensOrden[posicion]==999){ //evalua si la siguiente posición es una COLUMNA
-                                console.log("COLUMNA validado en la posición: "+posicion);
-                                posicion++; //6
-
-                                //La siguiente posición debe de haber un operador de comparación
-                                if(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
-                                    while(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
-                                        console.log("Caracter Diferente Encontrado en la posicion:"+posicion+" y es: "+todosMisTokens[tokensOrden[posicion]]);
-                                        almacenarCaracterDiferente.push(todosMisTokens[tokensOrden[posicion]]);
-                                        posicion++; //7 despues 8
-                                        contadorComparadores++;
-                                    }
-
-                                    if(contadorComparadores==2){ //Aqui entra si son dos comparadores.
-                                        if(almacenarCaracterDiferente[0]!=almacenarCaracterDiferente[1]){//Evaluar que ambos comparadores sean diferentes
-                                            console.log("Es correcto. Los comparadores son diferentes.");
-                                            tronarCodigo=false;
-                                        }else{
-                                            console.log("ERROR DE SINTAXIS. Los comparadores son duplicados.");
-                                            tronarCodigo=true;
-                                        }
-                                    }
-                                    else if(contadorComparadores==1){
-                                        console.log("Es correcto. Solo es un comparador");
-                                        tronarCodigo=false;
-                                    }
-                                    else if(contadorComparadores!=1 && contadorComparadores!=2){
-                                        console.log("ERROR. Hay mas de 2 comparadores.");
-                                        tronarCodigo=true;
-                                    }
+    //Después del SELECT puede ser (*) o COLUMNA. Solo esas dos opciones.
+          const tokensReglas1=[655, 7, 309, 1000, 6 ]; //SELECT * FROM TABLA;
+                            //0   1   2    3    4
+     //   const tokensReglas2=[655,7,309, 1000, 800, 999, comparador, 998, 6]; //SELECT * FROM TABLA WHERE COLUMNA < REGISTRO;
+                              //0, 1, 2,  3,    4,   5,   6,          7,   8
 
 
-                                    if(tronarCodigo==false){ //continuar con el flujo del programa. Si es true pues no va a continuar aqui.
-                                        console.log("El codigo que sigue. Va bien el programa.");
-                                        if(tokensOrden[posicion]==998){ //evalua si la siguiente posicion es un REGISTRO
-                                            console.log("(REGISTRO) validado en la posición: "+posicion);
-                                            posicion++; //9
+if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
 
-                                            if(tokensOrden[posicion]==6){ //evalua si la siguiente posición es un (;)
-                                                console.log("(;) validado en la posición: "+posicion+". Fin del programa");
-                                                
-                                            }else{
-                                                console.log("ERROR DE SINTAXIS. Se esperaba un ; en la posición: "+posicion);
-                                            }
-
-
-                                        }else{
-                                            console.log("ERROR DE SINTAXIS. Se esperaba un REGISTRO en la posicion: "+posicion);
-                                        }
-
-                                    }
-                                    
-                                    
-                                    
-                                    
-                                }else{
-                                    console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN LA POSICIÓN: "+posicion);
-                                }
-                        
-                            }else{
-                                console.log("ERROR DE SINTAXIS. COLUMNA no encontrada en la posicion: "+posicion); 
-                            }
-                        }else{//si no es un (;) ni un WHERE. Es error de sintaxis.
-                            console.log("ERROR DE SINTAXIS. NI ; ni un WHERE en la posicion: "+posicion);
-                        } //copiar
-
-                    }else{
-                        console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ (TABLA) en la posicion: "+posicion);
-                    }
-                }else{
-                    console.log("ERROR DE SINTAXIS. NO SE ENCONTRÓ UN FROM en la posicion: "+posicion);
-                }
-            }
-//-----------------SEGUNDA OPCION SI LA POSICION 1 ES UNA COLUMNA-----------------------------------------
-//si la posición 1 no es un (*) evaluara si es una COLUMNA 
-            else if(tokensOrden[posicion]==999){ //evalua si la siguiente posición es una columna
-                console.log("(COLUMNA) validado en la posicion: "+posicion);
-                posicion++; //2
-
-                    if(tokensOrden[posicion]==309){ //evalua si la siguiente posicion es un FROM
-                    console.log("(FROM) validado en la posición: "+posicion);
-                    posicion++; //3
-                            if(tokensOrden[posicion]==1000){ //despues de FROM debe ser TABLA
-                                console.log("(TABLA) validado en la posicion: "+posicion);
-                                posicion++; //4
-                                    if(tokensOrden[posicion]==6){ //despues de TABLA debe ser (;) o un where
-                                        console.log("(;) VALIDADO en la posicion: "+posicion+". FIN DEL PROGRAMA");
-                                    }
-                                    else if(tokensOrden[posicion]==800){ //evalua si la siguiente posición es un WHERE
-                                        console.log("WHERE validado en la posición: "+posicion); //-------------HASTA AQUI TODO BIEN
-                                        posicion++; //5
-
-                                        if(tokensOrden[posicion]==999){ //evalua si la siguiente posición es una COLUMNA
-                                            console.log("COLUMNA validado en la posición: "+posicion);
-                                            posicion++; //6
-
-                                            //La siguiente posición debe de haber un operador de comparación
-                                            if(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
-                                                while(numerosDeCaracteresEspeciales.includes(tokensOrden[posicion])){
-                                                    console.log("Caracter Diferente Encontrado en la posicion:"+posicion+" y es: "+todosMisTokens[tokensOrden[posicion]]);
-                                                    almacenarCaracterDiferente.push(todosMisTokens[tokensOrden[posicion]]);
-                                                    posicion++; //7 despues 8
-                                                    contadorComparadores++;
-                                                }
-
-                                                if(contadorComparadores==2){ //Aqui entra si son dos comparadores.
-                                                    if(almacenarCaracterDiferente[0]!=almacenarCaracterDiferente[1]){//Evaluar que ambos comparadores sean diferentes
-                                                        console.log("Es correcto. Los comparadores son diferentes.");
-                                                        tronarCodigo=false;
-                                                    }else{
-                                                        console.log("ERROR DE SINTAXIS. Los comparadores son duplicados.");
-                                                        tronarCodigo=true;
-                                                    }
-                                                }
-                                                else if(contadorComparadores==1){
-                                                    console.log("Es correcto. Solo es un comparador");
-                                                    tronarCodigo=false;
-                                                }
-                                                else if(contadorComparadores!=1 && contadorComparadores!=2){
-                                                    console.log("ERROR. Hay mas de 2 comparadores.");
-                                                    tronarCodigo=true;
-                                                }
-
-
-                                                if(tronarCodigo==false){ //continuar con el flujo del programa. Si es true pues no va a continuar aqui.
-                                                    console.log("El codigo que sigue. Va bien el programa.");
-                                                    if(tokensOrden[posicion]==998){ //evalua si la siguiente posicion es un REGISTRO
-                                                        console.log("(REGISTRO) validado en la posición: "+posicion);
-                                                        posicion++; //9
-
-                                                        if(tokensOrden[posicion]==6){ //evalua si la siguiente posición es un (;)
-                                                            console.log("(;) validado en la posición: "+posicion+". Fin del programa");
-                                                            
-                                                        }else{
-                                                            console.log("ERROR DE SINTAXIS. Se esperaba un ; en la posición: "+posicion);
-                                                        }
-
-
-                                                    }else{
-                                                        console.log("ERROR DE SINTAXIS. Se esperaba un REGISTRO en la posicion: "+posicion);
-                                                    }
-
-                                                }
-                                                
-                                                
-                                                
-                                                
-                                            }else{
-                                                console.log("ERROR DE SINTAXIS. NO HAY UN OPERADOR DE COMPARACIÓN EN LA POSICIÓN: "+posicion);
-                                            }
-                                    
-                                        }else{
-                                            console.log("ERROR DE SINTAXIS. COLUMNA no encontrada en la posicion: "+posicion); 
-                                        }
-                                    }else{//si no es un (;) ni un WHERE. Es error de sintaxis.
-                                        console.log("ERROR DE SINTAXIS. NI ; ni un WHERE en la posicion: "+posicion);
-                                    } //copiar
-
-                            }else{
-                                console.log("ERROR DE SINTAXIS. Se esperaba (TABLA) en la posicion: "+posicion);
-                            }
-                    }//posicion 2
-                    
-                    else if(tokensOrden[posicion]==3){ //si no es un FROM puede ser un (,)
-                        
-                        while(tokensOrden[posicion+2]==3){
-                            if(tokensOrden[posicion+1]==999){
-                                console.log("(COLUMNA) validado en la posicion: "+posicion+1);
-                                posicion=posicion+2;
-                            }
-                        }
+    
+    if(tokensReglas1==tokensEncontrados){
+        console.log("Es válido el Query");
+    }else{
+        console.log("NO SON EL MISMO ARRAY.\nTokens Encontrados: "+tokensEncontrados+"\nTokens Reglas 1: "+tokensReglas1);
+    }
+    
 
 
 
-                    }else{ //Si no es un FROM es error de sintaxis.
-                        console.log("ERROR DE SINTAXIS. Se esperaba FROM o (,) en la posicion: "+posicion);
-                    }
-
-                
 
 
-//--------------------------------------------------------------------------------------------------------------
-            }else{   //ENTRA EL FLUJO DE ESTE BLOQUE SI NO HAY NI UN ASTERISCO NI COLUMNA EN LA POSICION 1
-                console.log("ERROR DE SINTAXIS. Ni (*) NI COLUMNA en la posicion: "+posicion);
-            }
-//ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/ERROR/
-//sino empieza con SELECT truena el programa. También si no contiene un (;) en el ultimo elemento.
-        }else{
-            console.log("ERROR DE sintaxis. El Query no inicia con (SELECT) o no termina con (;)");
-        }
+}else{ //No es select concluye el programa.
+    console.log("Error de sintaxis. No se encontro SELECT al inicio del query.");
+}
+
+
+
+
+
 
 
 
