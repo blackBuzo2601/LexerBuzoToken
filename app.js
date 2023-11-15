@@ -490,10 +490,16 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                             }else{
                                 console.log("ERROR DE SINTAXIS. Se esperaba (TABLA) en la posicion: "+posicion);
                             }
-                    }
+                    }//posicion 2
+                    
                     else if(tokensOrden[posicion]==3){ //si no es un FROM puede ser un (,)
-                        console.log("(,) validado en la posicion: "+posicion);
-                        posicion++;
+                        
+                        while(tokensOrden[posicion+2]==3){
+                            if(tokensOrden[posicion+1]==999){
+                                console.log("(COLUMNA) validado en la posicion: "+posicion+1);
+                                posicion=posicion+2;
+                            }
+                        }
 
 
 

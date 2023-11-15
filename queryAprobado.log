@@ -1,5 +1,11 @@
 select
 columna
+,
+columna
+,
+columna
+,
+columna
 from
 tabla
 where
