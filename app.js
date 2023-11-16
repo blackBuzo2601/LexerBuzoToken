@@ -258,8 +258,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
     //VARIABLES NECESARIAS PARA ESTE MODULO DEL CODIGO:
         var tokensEncontrados=[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
-        var sonIguales;
-        var mismoTamaño;
+        const caracteresComparadores=["<",">","=","!"];
 
         for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
             numerosDeCaracteresEspeciales.push(i);
@@ -289,72 +288,36 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
 
     console.log("PRUEBAS DEL SISTEMA");
     console.log(tokensEncontrados); //para verificar que esté almacenando en el array los tokens correctamente
-    //tokensEncontrados=[655, 7, 309, 1000, 6 ]
     console.log("PRUEBAS DEL SISTEMA\n");
-    
 
+    
+    //objeto que almacena pares clave-valor de reglas para evaluar en el sintaxis de SELECT
+    var reglasSintaxis={
+        "SELECT_ASTERISCO": [655,7],    //  SELECT *
+        "SELECT_COLUMNA":[655,999],     //  SELECT COLUMNA
+        "COMA": [3],                    //  ,
+        "FROM_TABLA":[309,1000,6],      //  FROM TABLA;
+        "WHERE_COLUMNA":[800,900],      //  WHERE COLUMNA
+        "COMPARADOR": ["comparador",998]    //<= >= < > != =   REGISTRO
+    } 
+    
    
-          const tokensReglas1=[655, 7, 309, 1000, 6 ]; //SELECT * FROM TABLA;
-                              //0   1   2    3    4
-          const tokenReglas1SubArray1=[800, 999] //WHERE, COLUMNA
-
-      //    const tokensReglas2=[655,7,309, 1000, 800, 999, comparador, 998, 6]; //SELECT * FROM TABLA WHERE COLUMNA < REGISTRO;
-                              // 0,  1, 2,  3,    4,   5,   6,          7,   8
-    
+  
 
 if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
-
-    if(tokensEncontrados[1]==7){ //VALIDAR SELECT *
-
-        sonIguales=true;  //inicializar variables
-        mismoTamaño=false; 
-        
-          //comparar si ambos arrays tienen el mismo longitud
-            if(tokensEncontrados.length==tokensReglas1.length){
-                mismoTamaño=true; 
-            }else{
-                mismoTamaño=false;
-            }
-            
-            if(mismoTamaño==true){
-                //este for iterara por cada uno de los elementos de tokensReglas1
-                for (let t=0;t<tokensReglas1.length;t++){ //evaluar que ambos arrays sean iguales
-                    if(tokensReglas1[t] !== tokensEncontrados[t]){
-                        sonIguales = false;
-                        break; //salir del for una vez que se cumpla esta condicion
-                    }
-                }//fin for
-            }
-
-            if(mismoTamaño==true  && sonIguales==true){
-                console.log("Es valido el Query");
-            }
-            
-            //No se cumplio la condición anterior, entonces evaluara que exista un WHERE
-            else if(tokensEncontrados[4]==800){ //evaluar que la posicion 4 sea WHERE
-                sonIguales=true;  //inicializar variables
-                mismoTamaño=false; 
-
-
-
-            }else{
-                console.log("Error de sintaxis. Ni un (;) ni un WHERE en la posicion 4.");
-            }
-               
-            
-
-            
-
-    }//fin caso SELECT *
-
-
-    else if(tokensEncontrados[1]==999){ //no es (*) entonces validar SELECT COLUMNA
-        
-    }//fin caso SELECT COLUMNA
-
-    else{ //ni (*) ni COLUMNA. Entonces es ERROR de SINTAXIS
-        console.log("ERROR DE SINTAXIS. Después de SELECT no hay (*) ni (COLUMNA)");
+    
+    //con slice hacemos que tome en cuenta las posiciones 0 y 1 de tokensEncontrados
+    //utilizamos toString() para poder comparar de una mejor manera que sean iguales los arreglos.
+    if(tokensEncontrados.slice(0,2).toString()==reglasSintaxis["SELECT_ASTERISCO"].toString()){
+        console.log("SELECT ASTERISCO VALIDADO");
+    }else{
+        console.log("joder tienes un error");
     }
+    
+
+
+
+
 //--------------------------------------NO EMPIEZA CON SELECT------------------------------------------------------
 }else{ //No es SELECT entonces concluye el programa.
     console.log("Error de sintaxis. No se encontro SELECT al inicio del query.");

@@ -1,1 +1,1 @@
-select * from tabla where 
+select columna from tabla;

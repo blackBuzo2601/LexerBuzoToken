@@ -1,6 +1,5 @@
 select
-*
-from
+columna
 tabla
+from
 ;
-where
