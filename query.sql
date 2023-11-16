@@ -1,1 +1,1 @@
-select columna,columna from tabla;
+select columna ,columna ,columna ,columna from tabla;

@@ -371,9 +371,27 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
                 console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(4,6));
             }
 
-        }else{//Si no es FROM_TABLA es error de Sintaxis.
-            console.log("ERROR DE SINTAXIS. SE ESPERABA UN (309,1000). Tokens ingresados: "+tokensEncontrados.slice(2,4));
         }
+        //si no es FROM_TABLA, va a buscar que haya otra columna, después de esa primera COLUMNA.
+        else if(tokensEncontrados.slice(2,4).toString()==reglasSintaxis["COMA_COLUMNA"].toString()){
+         var posicion=2;
+         while(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["COMA_COLUMNA"].toString()){ //encontrar una coma después de una columna
+            console.log("COMA_COLUMNA Validado en posicion: "+posicion+" y posicion: "+(posicion+1)); //+1 para considerar el siguiente de "posicion", recordemos que el segundo parametro de slice no es tomado en cuenta bien.
+            posicion=posicion+2;
+         }
+         if(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["FROM_TABLA"].toString()){
+            console.log("FROM_TABLA validado");
+         }else{
+            console.log("Error de Sintaxis. Se esperaba FROM_TABLA. Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
+         }
+        
+        }
+        else{ //si no es (FROM_TABLA) ni más columnas (,COLUMNA) es error de sintaxis
+            console.log("ERROR DE SINTAXIS. Se esperaba (FROM_TABLA) o (,COLUMNA). Tokens ingresados: "+tokensEncontrados.slice(2,4));
+        }
+
+
+        
     
 //---------------------------No es SELECT * ni SELECT COLUMNA, entonces Error de Sintaxis---------------------------
     }else{ //SI DESPUÉS DEL SELECT no hay COLUMNA ni * es error de sintaxis.
