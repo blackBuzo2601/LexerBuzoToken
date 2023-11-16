@@ -260,10 +260,6 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
         const caracteresComparadores="<>=!";
 
-        for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
-            numerosDeCaracteresEspeciales.push(i);
-        } //este arreglo nos servirá porque recordemos que los primeros 99 tokens son para caracteres especiales.
-        
 //ESTE BUCLE FOR NO TIENE EXPLICACIÓN. ES UNO QUE COPIÉ Y PEGUÉ DE OTRA SECCION DEL CODIGO.
 //AQUI LO QUE VA A HACER ES QUE LOS TOKENS ENCONTRADOS LOS VA A PUSHEAR EN UN ARRAY (tokensEncontrados)
         for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
@@ -279,22 +275,19 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
                 }
             } //fin sub ciclo for que recorre el objeto todosMisTokens
             if(banderaPalabraEncontrada==false){
-               // console.log(""+queryDataActual+" NO es una palabra reservada");
-               //no realizar por el momento
-                //LO QUE DEBO REALIZAR ES QUE LO QUE NO SE ENCUENTRE EN sqlkeywords.txt o que no sea palabra reservada
-                //tambien lo guarde en tokensEncontrados con push(r) tal cual.
+                tokensEncontrados.push(queryDataActual); //almacenar de igual forma en el array la palabra NO RESERVADA 
             }
         }//FIN DE ESTE BUCLE FOR
 
-    console.log("PRUEBAS DEL SISTEMA");
+    console.log("TOKENS DETECTADOS de Query.sql: ");
     console.log(tokensEncontrados); //para verificar que esté almacenando en el array los tokens correctamente
-    console.log("PRUEBAS DEL SISTEMA\n");
+    console.log("\n");
 
     //objeto que almacena pares clave-valor de reglas para evaluar en el sintaxis de SELECT
     var reglasSintaxis={
         "SELECT_ASTERISCO": [655,7],    //  SELECT *
         "SELECT_COLUMNA":[655,999],     //  SELECT COLUMNA
-        "COMA": [3],                    //  ,
+        "COMA_COLUMNA": [3,999],        //  ,COLUMNA
         "FROM_TABLA":[309,1000],         //  FROM TABLA;
         "WHERE_COLUMNA":[800,999],      //  WHERE COLUMNA
         "COMPARADOR": ["comparador",998],    //<= >= < > != =   REGISTRO
@@ -329,7 +322,7 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
 
                 }else{ //si no es un comparador error de sintaxis
                     console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[6]);
-                    console.log(todosMisTokens[tokensEncontrados[6]]);
+                    
                 }
             }
             else if(tokensEncontrados[4]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
@@ -341,11 +334,51 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
         }else{
             console.log("ERROR DE SINTAXIS. SE ESPERABA UN (309,1000). Tokens ingresados: "+tokensEncontrados.slice(2,4));
         }
-//------------------------------------SELECT COLUMNA------------------------------------------------------
-    }else{ //si no es SELECT *, ES SELECT COLUMNA
-        
-    }
+//------------------------------------SELECT COLUMNA-----------------------------------------------------------------  
+//si no es SELECT *, ES SELECT COLUMNA
+                //toma posiciones 0 y 1, excluyendo posicion 2.
+}else if(tokensEncontrados.slice(0,2).toString()==reglasSintaxis["SELECT_COLUMNA"].toString()){
+    console.log("SELECT_COLUMNA Validado.");
+
+                //toma posiciones 2 y 3, excluyendo posicion 4.
+        if(tokensEncontrados.slice(2,4).toString()==reglasSintaxis["FROM_TABLA"].toString()){
+            console.log("FROM_TABLA VALIDADO");
+            
+            //slice para considerar las posiciones 4 y 5, exluyendo la posicion 6
+            if(tokensEncontrados.slice(4,6).toString()==reglasSintaxis["WHERE_COLUMNA"].toString()){ 
+                console.log("WHERE_COLUMNA VALIDADO");
+
+                //evaluar si la siguiente posicion es un comparador
+                if(caracteresComparadores.includes(todosMisTokens[tokensEncontrados[6]])){
+                    console.log("Comparador: "+todosMisTokens[tokensEncontrados[6]]+" validado.");
+
+                    //slice para considerar la posicion 7 en adelante
+                    if(tokensEncontrados.slice(7).toString()==reglasSintaxis["REGISTRO_;"].toString()){
+                        console.log("REGISTRO; Validado. Query Correcto: "+query);
+                    }else{
+                        console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(7));
+                    }
+
+                }else{ //si no es un comparador error de sintaxis
+                    console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[6]);
+                    
+                }
+            }
+            else if(tokensEncontrados[4]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
+                console.log("(;) VALIDADO. QUERY CORRECTO: "+query)
+            }
+            else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
+                console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(4,6));
+            }
+
+        }else{//Si no es FROM_TABLA es error de Sintaxis.
+            console.log("ERROR DE SINTAXIS. SE ESPERABA UN (309,1000). Tokens ingresados: "+tokensEncontrados.slice(2,4));
+        }
     
+//---------------------------No es SELECT * ni SELECT COLUMNA, entonces Error de Sintaxis---------------------------
+    }else{ //SI DESPUÉS DEL SELECT no hay COLUMNA ni * es error de sintaxis.
+        console.log("Error de sintaxis. No se encontró (*) ni COLUMNA después de SELECT. Tokens ingresados: "+tokensEncontrados.slice(0,2));
+    } 
 //=======================================NO EMPIEZA CON SELECT====================================================
 }else{ //No es SELECT entonces concluye el programa.
     console.log("Error de sintaxis. No se encontro SELECT al inicio del query.");
