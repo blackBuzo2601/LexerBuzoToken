@@ -283,7 +283,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
     console.log(tokensEncontrados); //para verificar que esté almacenando en el array los tokens correctamente
     console.log("\n");
 
-    //objeto que almacena pares clave-valor de reglas para evaluar en el sintaxis de SELECT
+//objeto que almacena pares clave-valor de reglas para evaluar en el sintaxis de SELECT
     var reglasSintaxis={
         "SELECT_ASTERISCO": [655,7],    //  SELECT *
         "SELECT_COLUMNA":[655,999],     //  SELECT COLUMNA
@@ -293,10 +293,38 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         "COMPARADOR": ["comparador",998],    //<= >= < > != =   REGISTRO
         "REGISTRO_;": [998,6]           //REGISTRO ;
     } 
+
+//------------------------DECLARACION DE FUNCIONES para no copiar y pegar codigo----------------------------------------------
+    function validaWhereColumnaSignoRegistroPyc(){ //WHERE COLUMNA < REGISTRO ;
+            //slice para considerar las posiciones 4 y 5, exluyendo la posicion 6
+            if(tokensEncontrados.slice(4,6).toString()==reglasSintaxis["WHERE_COLUMNA"].toString()){ 
+                console.log("WHERE_COLUMNA VALIDADO");
+
+                if(caracteresComparadores.includes(todosMisTokens[tokensEncontrados[6]])){ //evaluar si la siguiente posicion es un comparador
+                    console.log("Comparador: "+todosMisTokens[tokensEncontrados[6]]+" validado.");
+
+                    if(tokensEncontrados.slice(7).toString()==reglasSintaxis["REGISTRO_;"].toString()){ //slice para considerar la posicion 7 en adelante
+                        console.log("REGISTRO; Validado. Query Correcto: "+query);
+                    }else{
+                        console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(7));
+                    }
+                }else{ //si no es un comparador error de sintaxis
+                    console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[6]);  
+                }
+            }
+            else if(tokensEncontrados[4]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
+                console.log("(;) VALIDADO. QUERY CORRECTO: "+query);
+            }
+            else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
+                console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(4,6));
+            }            
+    } //fin funcion
+
+
+//-------------------------------------------------------------------------------------------------------------------
     
 if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
-    
-    //con slice hacemos que tome en cuenta las posiciones 0 y 1 de tokensEncontrados
+    //con slice hacemos que tome en cuenta las posiciones 0 y 1 de tokensEncontrados excluyendo la posicion del 2do parametro (2)
     //utilizamos toString() para poder comparar de una mejor manera que sean iguales los arreglos.
     if(tokensEncontrados.slice(0,2).toString()==reglasSintaxis["SELECT_ASTERISCO"].toString()){
         console.log("SELECT_ASTERISCO VALIDADO");
@@ -304,33 +332,7 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
         //slice para considerar las posiciones 2 y 3, excluyendo la posicion 4
         if(tokensEncontrados.slice(2,4).toString()==reglasSintaxis["FROM_TABLA"].toString()){
             console.log("FROM_TABLA VALIDADO");
-            
-            //slice para considerar las posiciones 4 y 5, exluyendo la posicion 6
-            if(tokensEncontrados.slice(4,6).toString()==reglasSintaxis["WHERE_COLUMNA"].toString()){ 
-                console.log("WHERE_COLUMNA VALIDADO");
-
-                //evaluar si la siguiente posicion es un comparador
-                if(caracteresComparadores.includes(todosMisTokens[tokensEncontrados[6]])){
-                    console.log("Comparador: "+todosMisTokens[tokensEncontrados[6]]+" validado.");
-
-                    //slice para considerar la posicion 7 en adelante
-                    if(tokensEncontrados.slice(7).toString()==reglasSintaxis["REGISTRO_;"].toString()){
-                        console.log("REGISTRO; Validado. Query Correcto: "+query);
-                    }else{
-                        console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(7));
-                    }
-
-                }else{ //si no es un comparador error de sintaxis
-                    console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[6]);
-                    
-                }
-            }
-            else if(tokensEncontrados[4]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
-                console.log("(;) VALIDADO. QUERY CORRECTO: "+query)
-            }
-            else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
-                console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(4,6));
-            }
+                validaWhereColumnaSignoRegistroPyc(); //llamar a la función.
         }else{
             console.log("ERROR DE SINTAXIS. SE ESPERABA UN (309,1000). Tokens ingresados: "+tokensEncontrados.slice(2,4));
         }
@@ -339,38 +341,10 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
                 //toma posiciones 0 y 1, excluyendo posicion 2.
 }else if(tokensEncontrados.slice(0,2).toString()==reglasSintaxis["SELECT_COLUMNA"].toString()){
     console.log("SELECT_COLUMNA Validado.");
-
                 //toma posiciones 2 y 3, excluyendo posicion 4.
         if(tokensEncontrados.slice(2,4).toString()==reglasSintaxis["FROM_TABLA"].toString()){
             console.log("FROM_TABLA VALIDADO");
-            
-            //slice para considerar las posiciones 4 y 5, exluyendo la posicion 6
-            if(tokensEncontrados.slice(4,6).toString()==reglasSintaxis["WHERE_COLUMNA"].toString()){ 
-                console.log("WHERE_COLUMNA VALIDADO");
-
-                //evaluar si la siguiente posicion es un comparador
-                if(caracteresComparadores.includes(todosMisTokens[tokensEncontrados[6]])){
-                    console.log("Comparador: "+todosMisTokens[tokensEncontrados[6]]+" validado.");
-
-                    //slice para considerar la posicion 7 en adelante
-                    if(tokensEncontrados.slice(7).toString()==reglasSintaxis["REGISTRO_;"].toString()){
-                        console.log("REGISTRO; Validado. Query Correcto: "+query);
-                    }else{
-                        console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(7));
-                    }
-
-                }else{ //si no es un comparador error de sintaxis
-                    console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[6]);
-                    
-                }
-            }
-            else if(tokensEncontrados[4]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
-                console.log("(;) VALIDADO. QUERY CORRECTO: "+query)
-            }
-            else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
-                console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(4,6));
-            }
-
+            validaWhereColumnaSignoRegistroPyc(); //llamar a la función.
         }
         //si no es FROM_TABLA, va a buscar que haya otra columna, después de esa primera COLUMNA.
         else if(tokensEncontrados.slice(2,4).toString()==reglasSintaxis["COMA_COLUMNA"].toString()){
