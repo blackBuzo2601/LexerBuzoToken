@@ -2,5 +2,9 @@ select
 *
 from
 tabla
+WHERE
 columna
+<
+=
+registro
 ;

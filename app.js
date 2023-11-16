@@ -258,7 +258,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
     //VARIABLES NECESARIAS PARA ESTE MODULO DEL CODIGO:
         var tokensEncontrados=[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
         const numerosDeCaracteresEspeciales = []; //array que almacenara los numeros del 1 al 100
-        const caracteresComparadores=["<",">","=","!"];
+        const caracteresComparadores="<>=!";
 
         for (let i=1;i<=99;i++) { //for para crear el arreglo de numeros.
             numerosDeCaracteresEspeciales.push(i);
@@ -290,8 +290,6 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
     console.log(tokensEncontrados); //para verificar que esté almacenando en el array los tokens correctamente
     console.log("PRUEBAS DEL SISTEMA\n");
 
-
-    
     //objeto que almacena pares clave-valor de reglas para evaluar en el sintaxis de SELECT
     var reglasSintaxis={
         "SELECT_ASTERISCO": [655,7],    //  SELECT *
@@ -299,10 +297,10 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         "COMA": [3],                    //  ,
         "FROM_TABLA":[309,1000],         //  FROM TABLA;
         "WHERE_COLUMNA":[800,999],      //  WHERE COLUMNA
-        "COMPARADOR": ["comparador",998]    //<= >= < > != =   REGISTRO
+        "COMPARADOR": ["comparador",998],    //<= >= < > != =   REGISTRO
+        "REGISTRO_;": [998,6]           //REGISTRO ;
     } 
     
-   
 if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
     
     //con slice hacemos que tome en cuenta las posiciones 0 y 1 de tokensEncontrados
@@ -317,6 +315,22 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
             //slice para considerar las posiciones 4 y 5, exluyendo la posicion 6
             if(tokensEncontrados.slice(4,6).toString()==reglasSintaxis["WHERE_COLUMNA"].toString()){ 
                 console.log("WHERE_COLUMNA VALIDADO");
+
+                //evaluar si la siguiente posicion es un comparador
+                if(caracteresComparadores.includes(todosMisTokens[tokensEncontrados[6]])){
+                    console.log("Comparador: "+todosMisTokens[tokensEncontrados[6]]+" validado.");
+
+                    //slice para considerar la posicion 7 en adelante
+                    if(tokensEncontrados.slice(7).toString()==reglasSintaxis["REGISTRO_;"].toString()){
+                        console.log("REGISTRO; Validado. Query Correcto: "+query);
+                    }else{
+                        console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(7));
+                    }
+
+                }else{ //si no es un comparador error de sintaxis
+                    console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[6]);
+                    console.log(todosMisTokens[tokensEncontrados[6]]);
+                }
             }
             else if(tokensEncontrados[4]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
                 console.log("(;) VALIDADO. QUERY CORRECTO: "+query)
@@ -324,29 +338,14 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
             else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
                 console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(4,6));
             }
-               
-            
-
-            
-
-
-
-
         }else{
             console.log("ERROR DE SINTAXIS. SE ESPERABA UN (309,1000). Tokens ingresados: "+tokensEncontrados.slice(2,4));
         }
-        
-
-
 //------------------------------------SELECT COLUMNA------------------------------------------------------
     }else{ //si no es SELECT *, ES SELECT COLUMNA
         
     }
     
-
-
-
-
 //=======================================NO EMPIEZA CON SELECT====================================================
 }else{ //No es SELECT entonces concluye el programa.
     console.log("Error de sintaxis. No se encontro SELECT al inicio del query.");
