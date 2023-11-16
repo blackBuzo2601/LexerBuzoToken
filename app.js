@@ -379,20 +379,41 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
             console.log("COMA_COLUMNA Validado en posicion: "+posicion+" y posicion: "+(posicion+1)); //+1 para considerar el siguiente de "posicion", recordemos que el segundo parametro de slice no es tomado en cuenta bien.
             posicion=posicion+2;
          }
-         if(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["FROM_TABLA"].toString()){
-            console.log("FROM_TABLA validado");
-         }else{
-            console.log("Error de Sintaxis. Se esperaba FROM_TABLA. Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
-         }
-        
+            if(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["FROM_TABLA"].toString()){
+                console.log("FROM_TABLA validado");
+
+                if(tokensEncontrados.slice(posicion+2,posicion+4).toString()==reglasSintaxis["WHERE_COLUMNA"].toString()){ 
+                    console.log("WHERE_COLUMNA VALIDADO");
+    
+                    //evaluar si la siguiente posicion es un comparador
+                    if(caracteresComparadores.includes(todosMisTokens[tokensEncontrados[posicion+4]])){
+                        console.log("Comparador: "+todosMisTokens[tokensEncontrados[posicion+4]]+" validado.");
+    
+                        //slice para considerar la posicion 7 en adelante
+                        if(tokensEncontrados.slice(posicion+5).toString()==reglasSintaxis["REGISTRO_;"].toString()){
+                            console.log("REGISTRO; Validado. Query Correcto: "+query);
+                        }else{
+                            console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(posicion+5));
+                        }
+    
+                    }else{ //si no es un comparador error de sintaxis
+                        console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[posicion+4]);                        
+                    }
+                }
+                else if(tokensEncontrados[posicion+2]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
+                    console.log("(;) VALIDADO. QUERY CORRECTO: "+query)
+                }
+                else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
+                    console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(posicion+2,posicion+4));
+                }            
+
+            }else{
+                console.log("Error de Sintaxis. Se esperaba FROM_TABLA. Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
+            }
         }
         else{ //si no es (FROM_TABLA) ni más columnas (,COLUMNA) es error de sintaxis
             console.log("ERROR DE SINTAXIS. Se esperaba (FROM_TABLA) o (,COLUMNA). Tokens ingresados: "+tokensEncontrados.slice(2,4));
         }
-
-
-        
-    
 //---------------------------No es SELECT * ni SELECT COLUMNA, entonces Error de Sintaxis---------------------------
     }else{ //SI DESPUÉS DEL SELECT no hay COLUMNA ni * es error de sintaxis.
         console.log("Error de sintaxis. No se encontró (*) ni COLUMNA después de SELECT. Tokens ingresados: "+tokensEncontrados.slice(0,2));
@@ -401,14 +422,6 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
 }else{ //No es SELECT entonces concluye el programa.
     console.log("Error de sintaxis. No se encontro SELECT al inicio del query.");
 }
-
-
-
-
-
-
-
-
 
             }); //fin del readFile que lee QueryAprobado.log
 
