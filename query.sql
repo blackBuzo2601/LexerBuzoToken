@@ -1,1 +1,1 @@
-select columna,columna,columna from tabla;
+select * from tabla where columna < registro;

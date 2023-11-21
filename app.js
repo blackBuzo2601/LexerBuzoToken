@@ -15,9 +15,8 @@ NOTA 5: 12/11/2023 Momento de comenzar con los casos de SELECT con los tokens as
 /*  Usamos el modulo fs de Node.js
     con require ('fs) se esta importando el modulo 
     para acceder a todas las funciones y metodos de fs. */
-    const { triggerAsyncId } = require('async_hooks');
+
 const fs = require ('fs'); 
-const { todo } = require('node:test');
     /*readFile es un método de fs.
     UTF-8 el parámetro que indica que se desea leer el archivo en formato UTF-8. 
     (err, data) son las variables que usamos como parámetro de nuestro callBack.
