@@ -288,6 +288,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         "FROM_TABLA":[309,1000],         //  FROM TABLA;
         "WHERE_COLUMNA":[800,999],      //  WHERE COLUMNA
         "REGISTRO_;": [998,6]           //REGISTRO ;
+        //nuevas reglas para el Select mas extendido. (Evaluacion)
     } 
 var posicion=0;
 //------------------------DECLARACION DE FUNCIONES para no copiar y pegar codigo----------------------------------------------
