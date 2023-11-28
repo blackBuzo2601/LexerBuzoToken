@@ -63,7 +63,9 @@ fs.readFile('query.sql','utf8', (err, data) => {
         var contadorCaracteresEspeciales=0;
         var contadorDosPuntos=0;
         var contieneAbecedario=0;
-    
+        var formarQuery="";
+        var banderaPuntoYComa=false;
+
         console.log("\n\nIMPRESIÓN DE LOS ELEMENTOS DE QUERY SEPARADOS POR SALTOS DE LINEA:\n======================================================================");
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //PRIMER BUCLE FOR GENERAL
@@ -121,6 +123,25 @@ fs.readFile('query.sql','utf8', (err, data) => {
               
         }//FIN PRIMER BUCLE FOR GENERAL
     
+    console.log("PRUEBA DE IMPRESION de QUERY: ");
+    //adicion para que considere el query hasta que encuentre el primer (;).
+    for (let i=0;i<query.length;i++){
+        letraActual=query[i]; //almacena la letra
+
+        if(banderaPuntoYComa==false){ 
+            formarQuery=formarQuery+letraActual;
+        }
+
+        if(letraActual==";"){
+            banderaPuntoYComa=true; //una vez que es true no sigue formando el query.
+        }
+    }
+    console.log("variable formarQuery: "+formarQuery);
+
+
+
+
+
      //------------------------------------------------------------------------------------------------------------------------
     
     //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt y almacenarlos en un objeto {}
