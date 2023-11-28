@@ -1,6 +1,3 @@
-select columna from tabla         
+select columna,columna from tabla where columna < registro; 
 
 
-                  ;
-
-select * from tabla;

@@ -63,10 +63,8 @@ fs.readFile('query.sql','utf8', (err, data) => {
         var contadorCaracteresEspeciales=0;
         var contadorDosPuntos=0;
         var contieneAbecedario=0;
-        var formarQuery="";
-        var banderaPuntoYComa=false;
-
-        console.log("\n\nIMPRESIÓN DE LOS ELEMENTOS DE QUERY SEPARADOS POR SALTOS DE LINEA:\n======================================================================");
+    
+        console.log("\n\nIMPRESIÓN DE LOS ELEMENTOS DE Query.sql SEPARADOS POR SALTOS DE LINEA:\n======================================================================");
         //--------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //PRIMER BUCLE FOR GENERAL
         //Este bucle lo que va a hacer es la construcción de todos los elementos  de "query" considerando los espacios,
@@ -123,25 +121,6 @@ fs.readFile('query.sql','utf8', (err, data) => {
               
         }//FIN PRIMER BUCLE FOR GENERAL
     
-    console.log("PRUEBA DE IMPRESION de QUERY: ");
-    //adicion para que considere el query hasta que encuentre el primer (;).
-    for (let i=0;i<query.length;i++){
-        letraActual=query[i]; //almacena la letra
-
-        if(banderaPuntoYComa==false){ 
-            formarQuery=formarQuery+letraActual;
-        }
-
-        if(letraActual==";"){
-            banderaPuntoYComa=true; //una vez que es true no sigue formando el query.
-        }
-    }
-    console.log("variable formarQuery: "+formarQuery);
-
-
-
-
-
      //------------------------------------------------------------------------------------------------------------------------
     
     //DELIMITAR LOS ELEMENTOS DEL sqlkeywords.txt y almacenarlos en un objeto {}
@@ -245,7 +224,7 @@ fs.readFile('query.sql','utf8', (err, data) => {
     
     //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
             fs.readFile('queryAprobado.log','utf8', (err, data) => { //leer el query almacenado en queryAprobado.log
-                console.log("\nCOMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\n");
+                console.log("\nCOMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\nIMPRESION DEL TOKEN CORRESPONDIENTE DE LAS PALABRAS RESERVADAS\n");
                 
                 queryDataSpliteado=data.toUpperCase();  //Convertir todo el archivo a Mayusculas para no tener problemas con los tokens.
                 queryDataSpliteado=queryDataSpliteado.split("\n"); //separar data en base saltos de lineas.
@@ -309,7 +288,6 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         "FROM_TABLA":[309,1000],         //  FROM TABLA;
         "WHERE_COLUMNA":[800,999],      //  WHERE COLUMNA
         "REGISTRO_;": [998,6]           //REGISTRO ;
-        //nuevas reglas para el Select mas extendido. (Evaluacion)
     } 
 var posicion=0;
 //------------------------DECLARACION DE FUNCIONES para no copiar y pegar codigo----------------------------------------------
