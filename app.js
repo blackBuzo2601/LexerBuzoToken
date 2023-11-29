@@ -250,19 +250,45 @@ fs.readFile('query.sql','utf8', (err, data) => {
                     }
                         
                 }//FIN DEL TERCER BUCLE FOR GENERAL
-        
+       
+//adicion para que considere el query hasta que encuentre el primer (;).
+var formarQuery="";               
+    for (let i=0;i<query.length;i++){
+        letraActual=query[i]; //almacena la letra
+        formarQuery=formarQuery+letraActual; //construir el query
+
+        if(letraActual==";"){
+           break; //una vez que es true no sigue formando el query.
+        }
+    }
+//-------------------------------------------------------------------------------------------------------------                
+var arrayFormarQuery=[];
+//delimitar el query una vez que encuentra el primer punto y coma para ignorar lo demas del query.sql
+for(let i=0;i<queryDataSpliteado.length;i++){
+    queryDataActual=queryDataSpliteado[i];
+
+    if(queryDataActual==";"){
+        arrayFormarQuery.push(queryDataActual);
+        break; //se detiene el bucle, pues encontro el ; en una posicion.
+    }
+    arrayFormarQuery.push(queryDataActual);
+}//fin del bucle for para delimitar el query al primer ; bien.
+
+console.log("\nEL NUEVO ARRAY CON LOS ELEMENTOS HASTA EL PRIMER (;) ES: ");
+console.log(arrayFormarQuery);
+
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 //-----------------------CODIGO PARA EVALUAR SINTAXIS DE SELECT--------------------------------------------------------------------------------------------
-console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================\n");
+console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n========================================");
     //VARIABLES NECESARIAS PARA ESTE MODULO DEL CODIGO:
-        var tokensEncontrados=[]; //variable inicializada que almacenará en orden los tokens de cada elemento de query.sql
+        var tokensEncontrados=[]; //variable inicializada que almacenará en orden los tokens de cada elemento de arrayFormarQuery
         const caracteresComparadores="<>=!";
 
 //ESTE BUCLE FOR NO TIENE EXPLICACIÓN. ES UNO QUE COPIÉ Y PEGUÉ DE OTRA SECCION DEL CODIGO.
 //AQUI LO QUE VA A HACER ES QUE LOS TOKENS ENCONTRADOS LOS VA A PUSHEAR EN UN ARRAY (tokensEncontrados)
-        for(let q=0; q<queryDataSpliteado.length-1;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
+        for(let q=0; q<arrayFormarQuery.length;q++){ //bucle for para identificar los tokens de queryAprobado.log (lo mismo que hay en query.sql)
             banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
-            queryDataActual=queryDataSpliteado[q]; //almacena cada elemento de QueryAprobado.log
+            queryDataActual=arrayFormarQuery[q]; //almacena cada elemento de arrayFormarQuery
             //Bucle for subgeneral que recorre el objeto todosMisTokens
             for(let r=0;r<formarNumero+1;r++){ //formarNumero vale 1000 (el ultimo token de la lista) +1 para que considere también el ultimo elemento de sqlkeywords.txt
                 if(banderaPalabraEncontrada==false){
@@ -277,7 +303,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
             }
         }//FIN DE ESTE BUCLE FOR
 
-    console.log("TOKENS DETECTADOS de Query.sql: ");
+    console.log("TOKENS DETECTADOS de arrayFormarQuery: ");
     console.log(tokensEncontrados); //para verificar que esté almacenando en el array los tokens correctamente
 
 //objeto que almacena pares clave-valor de reglas para evaluar en el sintaxis de SELECT
@@ -300,7 +326,7 @@ var posicion=0;
                     console.log("Comparador: "+todosMisTokens[tokensEncontrados[posicion+2]]+" validado.");
 
                     if(tokensEncontrados.slice(posicion+3).toString()==reglasSintaxis["REGISTRO_;"].toString()){ //slice para considerar la posicion 7 en adelante
-                        console.log("REGISTRO; Validado. Query Correcto: "+query);
+                        console.log("REGISTRO; Validado. Query Correcto: "+formarQuery);
                     }else{
                         console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(posicion+3));
                     }
@@ -309,7 +335,7 @@ var posicion=0;
                 }
             }
             else if(tokensEncontrados[posicion]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
-                console.log("(;) VALIDADO. QUERY CORRECTO: "+query);
+                console.log("(;) VALIDADO. QUERY CORRECTO: "+formarQuery);
             }
             else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
                 console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));

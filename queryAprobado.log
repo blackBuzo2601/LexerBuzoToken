@@ -8,4 +8,15 @@ where
 columna
 <
 registro
+
+
+;
+
+
+
+
+select
+*
+from
+tabla
 ;
