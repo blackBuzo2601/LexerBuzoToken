@@ -222,34 +222,35 @@ fs.readFile('query.sql','utf8', (err, data) => {
     //que se trabajo para la asignación de tokens. En este punto la variable vale 816. Quiere decir que son 816 veces
     //que ocuparemos recorrer el objeto todosMisTokens para saber el token al que corresponde una palabra reservada.
     
-    //IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
-            fs.readFile('queryAprobado.log','utf8', (err, data) => { //leer el query almacenado en queryAprobado.log
-                console.log("\nCOMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\nIMPRESION DEL TOKEN CORRESPONDIENTE DE LAS PALABRAS RESERVADAS\n");
+//IMPRIMIR EL TOKEN CORRESPONDIENTE DE CADA PALABRA o Caracter.
+        fs.readFile('queryAprobado.log','utf8', (err, data) => { //leer el query almacenado en queryAprobado.log
+            console.log("\nCOMIENZA EL CÓDIGO DONDE SE LEE queryAprobado.log\n===============================================================\nIMPRESION DEL TOKEN CORRESPONDIENTE DE LAS PALABRAS RESERVADAS\n");
                 
-                queryDataSpliteado=data.toUpperCase();  //Convertir todo el archivo a Mayusculas para no tener problemas con los tokens.
-                queryDataSpliteado=queryDataSpliteado.split("\n"); //separar data en base saltos de lineas.
-    
-                //TERCER BUCLE FOR GENERAL: Este bucle trabaja sobre cada elemento en base saltos de linea de queryAprobado.log
-                for(let m=0;m<queryDataSpliteado.length-1;m++){ 
-                    banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
-    
-                    queryDataActual=queryDataSpliteado[m]; //almacena cada elemento de QueryAprobado.log
+            queryDataSpliteado=data.toUpperCase();  //Convertir todo el archivo a Mayusculas para no tener problemas con los tokens.
+            queryDataSpliteado=queryDataSpliteado.split("\n"); //separar data en base saltos de lineas.
+
+            //filtramos las lineas que son diferentes de una cadena vacia. Asi en esa variable estan
+            //los elementos sin los saltos de linea vacios.
+                queryDataSpliteado=queryDataSpliteado.filter((linea) => linea.trim() !== '');
+
+        //TERCER BUCLE FOR GENERAL: Este bucle trabaja sobre cada elemento en base saltos de linea de queryAprobado.log
+            for(let m=0;m<queryDataSpliteado.length;m++){ 
+                banderaPalabraEncontrada=false; //por defecto se inicializa en false esta variable.
+                queryDataActual=queryDataSpliteado[m]; //almacena cada elemento de QueryAprobado.log
                     
-                    //Bucle for subgeneral que recorre el objeto todosMisTokens
-                    for(let n=0;n<formarNumero+1;n++){ //formarNumero vale 997 (el ultimo token de la lista) +1 porque no estaba considerando el ultimo elemento de sqlkeywords.txt
-                        if(banderaPalabraEncontrada==false){
-                            if(queryDataActual==todosMisTokens[n]){
-                                console.log("La palabra reservada ("+queryDataActual+") corresponde al token: "+n);
-                                banderaPalabraEncontrada=true;
-                            }
-                        }
-                    } //fin sub ciclo for que recorre el objeto todosMisTokens
-            
+                //Bucle for subgeneral que recorre el objeto todosMisTokens
+                for(let n=0;n<formarNumero+1;n++){ //formarNumero vale 997 (el ultimo token de la lista) +1 porque no estaba considerando el ultimo elemento de sqlkeywords.txt
                     if(banderaPalabraEncontrada==false){
-                        console.log(""+queryDataActual+" NO es una palabra reservada");
+                        if(queryDataActual==todosMisTokens[n]){
+                            console.log("La palabra reservada ("+queryDataActual+") corresponde al token: "+n);
+                            banderaPalabraEncontrada=true;
+                        }
                     }
-                        
-                }//FIN DEL TERCER BUCLE FOR GENERAL
+                } //fin sub ciclo for que recorre el objeto todosMisTokens
+                if(banderaPalabraEncontrada==false){
+                    console.log(""+queryDataActual+" NO es una palabra reservada");
+                }                        
+            }//FIN DEL TERCER BUCLE FOR GENERAL
        
 //adicion para que considere el query hasta que encuentre el primer (;).
 var formarQuery="";               

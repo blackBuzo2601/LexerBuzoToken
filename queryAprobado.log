@@ -12,9 +12,6 @@ registro
 
 ;
 
-
-
-
 select
 *
 from
