@@ -1,4 +1,5 @@
 select
+distinct
 columna
 ,
 columna
@@ -12,6 +13,10 @@ columna
 registro
 order
 by
+columna
+,
+columna
+,
 columna
 ,
 columna

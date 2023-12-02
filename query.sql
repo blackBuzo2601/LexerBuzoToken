@@ -1,1 +1,1 @@
-select columna,columna,columna from tabla where columna < registro order by columna,columna ;  
+select distinct columna,columna,columna from tabla where columna < registro order by columna,columna,columna,columna ;  
