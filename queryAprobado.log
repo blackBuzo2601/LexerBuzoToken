@@ -1,7 +1,4 @@
 select
-distinct
-columna
-,
 columna
 ,
 columna
@@ -13,13 +10,6 @@ where
 columna
 <
 registro
-
-
-;
-
-
-select
-*
+order
+by
 from
-tabla
-;

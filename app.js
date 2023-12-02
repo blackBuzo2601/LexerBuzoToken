@@ -311,20 +311,23 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
     var reglasSintaxis={
         "SELECT_ASTERISCO": [655,7],    //  SELECT *
         "SELECT_COLUMNA":[655,999],     //  SELECT COLUMNA
+        "SELECT_DISTINCT": [655,241],  //SELECT DISTINCT
+
         "COMA_COLUMNA": [3,999],        //  ,COLUMNA
         "FROM_TABLA":[309,1000],         //  FROM TABLA;
         "WHERE_COLUMNA":[800,999],      //  WHERE COLUMNA
         "REGISTRO_;": [998,6],           //REGISTRO ;
         
-        //DISTINCT
-        "SELECT_DISTINCT": [655,241],
-
-
+        "REGISTRO_ORDER_BY" : [998,528,145], //REGISTRO ORDER BY
+        "ORDER_BY" : [528,145],         //ORDER BY
+        "COLUMNA_ASC" : [999,119],      //COLUMNA ASC
+        "COLUMNA_DESC" : [999,231],     //COLUMNA DESC
+        
     } 
 var posicion=0;
 //------------------------DECLARACION DE FUNCIONES para no copiar y pegar codigo----------------------------------------------
     function validaWhereColumnaSignoRegistroPyc(){ //WHERE COLUMNA < REGISTRO ;
-            //slice para considerar las posiciones 4 y 5, exluyendo la posicion 6
+           
             if(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["WHERE_COLUMNA"].toString()){ 
                 console.log("WHERE_COLUMNA VALIDADO");
 
@@ -332,9 +335,15 @@ var posicion=0;
                     console.log("Comparador: "+todosMisTokens[tokensEncontrados[posicion+2]]+" validado.");
 
                     if(tokensEncontrados.slice(posicion+3).toString()==reglasSintaxis["REGISTRO_;"].toString()){ //slice para considerar la posicion 7 en adelante
-                        console.log("REGISTRO; Validado. Query Correcto: "+formarQuery);
+                        console.log("REGISTRO; Validado.\nQuery Correcto: "+formarQuery);
+                    }
+                    //Si no es REGISTRO;, puede ser REGISTRO
+                    else if(tokensEncontrados[posicion+3]==998){
+                        console.log("REGISTRO Validado");
+                        posicion=posicion+4;
+                        validaOrderByColumna();
                     }else{
-                        console.log("ERROR DE SINTAXIS. Se esperaba REGISTRO;. Tokens ingresados: "+tokensEncontrados.slice(posicion+3));
+                        console.log("ERROR DE SINTAXIS. Se esperaba (REGISTRO;) o (REGISTRO)  Tokens ingresados: "+tokensEncontrados.slice(posicion+3));
                     }
                 }else{ //si no es un comparador error de sintaxis
                     console.log("ERROR DE SINTAXIS. Se esperaba un comparador. Token ingresado:  "+tokensEncontrados[posicion+2]);  
@@ -343,10 +352,39 @@ var posicion=0;
             else if(tokensEncontrados[posicion]==6){ //si no es un WHERE_COLUMNA, puede ser un ;
                 console.log("(;) VALIDADO. QUERY CORRECTO: "+formarQuery);
             }
+            //si no es un WHERE_COLUMNA ni ; puede ser un Order By
+            else if(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["ORDER_BY"].toString()){
+                validaOrderByColumna();
+            }
             else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
-                console.log("ERROR DE SINTAXIS. Se esperaba un (WHERE_COLUMNA) o (;). Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
+                console.log("ERROR DE SINTAXIS. Se esperaba un (WHERE_COLUMNA) o (;) o (ORDER BY) Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
             }            
     } //fin funcion
+
+    function validaOrderByColumna(){
+        if(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["ORDER_BY"].toString()){
+            console.log("ORDER_BY VALIDADO.");
+                if(tokensEncontrados[posicion+2]==999){
+                    console.log("COLUMNA VALIDADO.");
+                    
+
+
+
+
+
+
+
+                }else{
+                    console.log("ERROR DE SINTAXIS. Se esperaba (COLUMNA). Token ingresado: "+tokensEncontrados[posicion+2]);
+                }
+
+
+        }else{
+            console.log("ERROR DE SINTAXIS. Se esperaba (ORDER_BY). Tokens igresados: "+tokensEncontrados.slice(posicion,posicion+2));
+        }
+
+    }//fin funcion
+    
 //-------------------------------------------------------------------------------------------------------------------
 
 if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
@@ -395,7 +433,6 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
         console.log("SELECT_DISTINCT VALIDADO");
         if(tokensEncontrados[2]==999){
             console.log("COLUMNA VALIDADO");
-            
             if(tokensEncontrados.slice(3,5).toString()==reglasSintaxis["FROM_TABLA"].toString()){
                 console.log("FROM_TABLA VALIDADO");
                 posicion=5;
@@ -415,7 +452,6 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
                    }else{
                        console.log("Error de Sintaxis. Se esperaba FROM_TABLA. Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
                    }
-
                }else{
                 console.log("ERROR DE SINTAXIS. Se esperaba (FROM TABLA) o (,COLUMNA). Tokens ingresados: "+tokensEncontrados.slice(3,5));
                }
