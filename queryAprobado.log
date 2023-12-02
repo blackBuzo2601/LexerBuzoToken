@@ -1,4 +1,9 @@
 select
+distinct
+columna
+,
+columna
+,
 columna
 ,
 columna
@@ -11,6 +16,7 @@ registro
 
 
 ;
+
 
 select
 *

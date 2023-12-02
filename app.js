@@ -304,7 +304,7 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
             }
         }//FIN DE ESTE BUCLE FOR
 
-    console.log("TOKENS DETECTADOS de arrayFormarQuery: ");
+    console.log("TOKENS DETECTADOS de query.SQL: ");
     console.log(tokensEncontrados); //para verificar que esté almacenando en el array los tokens correctamente
 
 //objeto que almacena pares clave-valor de reglas para evaluar en el sintaxis de SELECT
@@ -314,7 +314,12 @@ console.log("\n\nCODIGO PARA EVALUAR SINTAXIS DE SELECT\n=======================
         "COMA_COLUMNA": [3,999],        //  ,COLUMNA
         "FROM_TABLA":[309,1000],         //  FROM TABLA;
         "WHERE_COLUMNA":[800,999],      //  WHERE COLUMNA
-        "REGISTRO_;": [998,6]           //REGISTRO ;
+        "REGISTRO_;": [998,6],           //REGISTRO ;
+        
+        //DISTINCT
+        "SELECT_DISTINCT": [655,241],
+
+
     } 
 var posicion=0;
 //------------------------DECLARACION DE FUNCIONES para no copiar y pegar codigo----------------------------------------------
@@ -339,7 +344,7 @@ var posicion=0;
                 console.log("(;) VALIDADO. QUERY CORRECTO: "+formarQuery);
             }
             else{ //si no es un WHERE_COLUMNA ni un ; es error de sintaxis.
-                console.log("ERROR DE SINTAXIS. Se esperaba un (800,999) o (6). Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
+                console.log("ERROR DE SINTAXIS. Se esperaba un (WHERE_COLUMNA) o (;). Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
             }            
     } //fin funcion
 //-------------------------------------------------------------------------------------------------------------------
@@ -385,10 +390,42 @@ if(tokensEncontrados[0]==655){ //VALIDAR QUE EMPIECE con SELECT
         else{ //si no es (FROM_TABLA) ni más columnas (,COLUMNA) es error de sintaxis
             console.log("ERROR DE SINTAXIS. Se esperaba (FROM_TABLA) o (,COLUMNA). Tokens ingresados: "+tokensEncontrados.slice(2,4));
         }
-//---------------------------No es SELECT * ni SELECT COLUMNA, entonces Error de Sintaxis---------------------------
-    }else{ //SI DESPUÉS DEL SELECT no hay COLUMNA ni * es error de sintaxis.
-        console.log("Error de sintaxis. No se encontró (*) ni COLUMNA después de SELECT. Tokens ingresados: "+tokensEncontrados.slice(0,2));
-    } 
+//--------------------------SELECT DISTINCT--------------------------------------------------------------------------
+    }else if(tokensEncontrados.slice(0,2).toString()==reglasSintaxis["SELECT_DISTINCT"].toString()){
+        console.log("SELECT_DISTINCT VALIDADO");
+        if(tokensEncontrados[2]==999){
+            console.log("COLUMNA VALIDADO");
+            
+            if(tokensEncontrados.slice(3,5).toString()==reglasSintaxis["FROM_TABLA"].toString()){
+                console.log("FROM_TABLA VALIDADO");
+                posicion=5;
+                validaWhereColumnaSignoRegistroPyc(); //llamar a la función.
+            }
+            //si no es FROM_TABLA, va a buscar que haya otra columna, después de esa primera COLUMNA.
+            else if(tokensEncontrados.slice(3,5).toString()==reglasSintaxis["COMA_COLUMNA"].toString()){
+                posicion=3;
+                while(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["COMA_COLUMNA"].toString()){ //encontrar una coma después de una columna
+                   console.log("COMA_COLUMNA Validado en posicion: "+posicion+" y posicion: "+(posicion+1)); //+1 para considerar el siguiente de "posicion", recordemos que el segundo parametro de slice no es tomado en cuenta bien.
+                   posicion=posicion+2;
+                }
+                   if(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["FROM_TABLA"].toString()){
+                       console.log("FROM_TABLA validado");
+                           posicion=posicion+2;
+                           validaWhereColumnaSignoRegistroPyc();
+                   }else{
+                       console.log("Error de Sintaxis. Se esperaba FROM_TABLA. Tokens ingresados: "+tokensEncontrados.slice(posicion,posicion+2));
+                   }
+
+               }else{
+                console.log("ERROR DE SINTAXIS. Se esperaba (FROM TABLA) o (,COLUMNA). Tokens ingresados: "+tokensEncontrados.slice(3,5));
+               }
+        }else{
+            console.log("ERROR DE SINTAXIS. Se esperaba (COLUMNA). Token ingresado: "+tokensEncontrados[2]);
+        }
+//---------------------------------------------------------------------------------------------------------------------------
+    }else{
+        console.log("ERROR DE SINTAXIS. Se esperaba (FROM_TABLA) o (,COLUMNA) o (DISTINCT) Tokens ingresados: "+tokensEncontrados.slice(2,4));
+    }
 //=======================================NO EMPIEZA CON SELECT====================================================
 }else{ //No es SELECT entonces concluye el programa.
     console.log("Error de sintaxis. No se encontro SELECT al inicio del query.");
