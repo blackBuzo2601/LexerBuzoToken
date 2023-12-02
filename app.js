@@ -366,10 +366,25 @@ var posicion=0;
             console.log("ORDER_BY VALIDADO.");
                 if(tokensEncontrados[posicion+2]==999){
                     console.log("COLUMNA VALIDADO.");
-                    
-
-
-
+                    if(tokensEncontrados[posicion+3]==6){
+                        console.log("(;) VALIDADO.\nQuery Correcto: "+formarQuery);
+                    }
+                    //no es (;) entonces pueden ser mas columnas entonces.
+                    else if(tokensEncontrados.slice(posicion+3,posicion+5).toString()==reglasSintaxis["COMA_COLUMNA"].toString()){
+                        posicion=posicion+3;
+                        while(tokensEncontrados.slice(posicion,posicion+2).toString()==reglasSintaxis["COMA_COLUMNA"].toString()){ //encontrar una coma después de una columna
+                           console.log("COMA_COLUMNA Validado en posicion: "+posicion+" y posicion: "+(posicion+1)); //+1 para considerar el siguiente de "posicion", recordemos que el segundo parametro de slice no es tomado en cuenta bien.
+                           posicion=posicion+2;
+                        }
+                        if(tokensEncontrados[posicion]==6){
+                            console.log("(;) VALIDADO.\nQuery correcto: "+formarQuery);
+                        }else{
+                            console.log("ERROR DE SINTAXIS. Se esperaba (;). Token ingresado: "+tokensEncontrados[posicion]);
+                        }
+                           
+                       }else{
+                            console.log("ERROR DE SINTAXIS. Se esperaba (;) o (COMA,COLUMNA). Tokens ingresados: "+tokensEncontrados.slice(posicion+3,posicion+5));
+                       }
 
 
 
